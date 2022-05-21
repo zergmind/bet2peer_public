@@ -1,16 +1,29 @@
 import getWeb3 from "../getWeb3";
 
 export class Web3Service {
-    web3;
-    constructor() {
-        this.web3 = await getWeb3();
-    }
+  web3;
+  constructor() {}
 
-    async getAccounts(){
-        return web3.eth.getAccounts();
+  async getWeb3() {
+    if (!this.web) {
+      this.web3 = await getWeb3();
     }
+  }
 
-    async getNetworkId(){
-        return web3.eth.net.getId();
-    }
+  async getAccounts() {
+    await this.getWeb3();
+    return this.web3.eth.getAccounts();
+  }
+
+  async getNetworkId() {
+    await this.getWeb3();
+    return this.web3.eth.net.getId();
+  }
+
+  //EXTRAÍDO DEL EJEMPLO ORIGINAL
+  // const deployedNetwork = SimpleStorageContract.networks[networkId];
+  // const instance = new web3.eth.Contract(
+  //   SimpleStorageContract.abi,
+  //   deployedNetwork && deployedNetwork.address
+  // );
 }
