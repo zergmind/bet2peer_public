@@ -2,7 +2,6 @@ import getWeb3 from "../getWeb3";
 
 export class Web3Service {
   web3;
-  constructor() {}
 
   async getWeb3() {
     if (!this.web) {
