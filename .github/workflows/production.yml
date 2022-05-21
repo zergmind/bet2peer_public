@@ -30,10 +30,10 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: NPM Install
         run: |
-          npm install ./client
+          npm --prefix ./client/ install
       - name: Production Build
         run: |
-          npm build ./client
+          npm --prefix ./client/ run build
       - name: Deploy to S3
         uses: jakejarvis/s3-sync-action@master
         with:
