@@ -28,15 +28,12 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Go to client
-        run: |
-          cd client
       - name: NPM Install
         run: |
-          npm install
+          npm install ./client
       - name: Production Build
         run: |
-          npm build
+          npm build ./client
       - name: Deploy to S3
         uses: jakejarvis/s3-sync-action@master
         with:
