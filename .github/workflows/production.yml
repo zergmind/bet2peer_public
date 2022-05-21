@@ -20,7 +20,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.17.6]
+        node-version: [16.15.0]
 
     steps:
       - uses: actions/checkout@v1
@@ -31,12 +31,12 @@ jobs:
       - name: Go to client
         run: |
           cd client
-      - name: Yarn Install
+      - name: NPM Install
         run: |
-          yarn install
+          npm install
       - name: Production Build
         run: |
-          yarn build
+          npm build
       - name: Deploy to S3
         uses: jakejarvis/s3-sync-action@master
         with:
