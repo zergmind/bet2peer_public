@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 // import SimpleStorageContract from "./contracts/SimpleStorage.son";
 import { Sidebar } from "./components/sidebar.js";
-import { Web3Service } from "./services/web3-service.js";
+// import { Web3Service } from "./services/web3-service.js";
 // import { P2PService } from "./services/p2p-service.js";
 import { WebsocketService } from "./services/websocket-service.js";
 
