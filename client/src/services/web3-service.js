@@ -3,21 +3,21 @@ import getWeb3 from "../getWeb3";
 export class Web3Service {
   web3;
 
-  async getWeb3() {
+  getWeb3 = async () => {
     if (!this.web) {
       this.web3 = await getWeb3();
     }
-  }
+  };
 
-  async getAccounts() {
-    await this.getWeb3();
+  getAccounts = async () => {
+    // await this.getWeb3();
     return this.web3.eth.getAccounts();
-  }
+  };
 
-  async getNetworkId() {
-    await this.getWeb3();
+  getNetworkId = async () => {
+    // await this.getWeb3();
     return this.web3.eth.net.getId();
-  }
+  };
 
   //EXTRAÍDO DEL EJEMPLO ORIGINAL
   // const deployedNetwork = SimpleStorageContract.networks[networkId];

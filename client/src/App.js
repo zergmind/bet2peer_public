@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 // import SimpleStorageContract from "./contracts/SimpleStorage.son";
 import { Sidebar } from "./components/sidebar.js";
-// import { Web3Service } from "./services/web3-service.js";
+import { Web3Service } from "./services/web3-service.js";
 // import { P2PService } from "./services/p2p-service.js";
 import { WebsocketService } from "./services/websocket-service.js";
 
@@ -15,7 +15,7 @@ class App extends Component {
     contract: null,
     websocketService: null,
     messages: [],
-    message: null,
+    message: "",
   };
   receiveMessage = (message) => {
     let { messages } = this.state;
@@ -26,9 +26,12 @@ class App extends Component {
   componentDidMount = async () => {
     try {
       // Get network provider and web3 instance.
-      // const web3Service = new Web3Service();
-      // var accounts = await web3Service.getAccounts();
       debugger;
+      const web3Service = new Web3Service();
+      await web3Service.getWeb3();
+      const accounts = await web3Service.getAccounts();
+      const networkId = await web3Service.getNetworkId();
+
       const websocketService = new WebsocketService();
       websocketService.setReceiveMessage(this.receiveMessage);
 
@@ -36,8 +39,7 @@ class App extends Component {
       // p2pService.start();
 
       // this.setState({ web3Service, accounts });
-      const accounts = "cuentafalsa";
-      this.setState({ accounts, websocketService });
+      this.setState({ accounts, websocketService, networkId });
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -56,20 +58,27 @@ class App extends Component {
   }
 
   sendMessage = async () => {
-    const { websocketService, message } = this.state;
+    const { websocketService, message, messages } = this.state;
+    messages.push(message);
     websocketService.sendMessage(message);
   };
 
   render() {
-    if (!this.state.accounts) {
-      return <div>Loading Web3, accounts, and contract...</div>;
-    }
     return (
       <div className="App">
         <h1>Bienvenido a Bet2Peer!</h1>
         <p>Apuestas descentralizadas.</p>
         <h2>Este es tu Address de Wallet</h2>
-        {/* <div>Account: {this.state.accounts[0]}</div> */}
+        <div>
+          Account:
+          {this.state.accounts && this.state.accounts.length > 0
+            ? this.state.accounts[0]
+            : "Cargando..."}
+        </div>
+        <div>
+          Esta es tu networkId:
+          {this.state.networkId ? this.state.networkId : "Cargando..."}
+        </div>
         <input
           value={this.state.message}
           onChange={(evt) => this.updateInputValue(evt)}
