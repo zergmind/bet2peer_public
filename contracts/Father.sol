@@ -15,19 +15,42 @@ import "../client/node_modules/@openzeppelin/contracts/access/Ownable.sol";
 // Declaracion del Smart Contract - Auction
 contract Father {
     // ----------- Variables (datos) -----------
+    //mapping de todos los contratos creados por un usuario con su contractId y MatchId
     mapping(address => mapping(uint256 => address)) private contractsByUserAndMatchId;
+    
+    //Estado del contrato
+    bool activeContract;
 
     // ----------- Constructor -----------
     // Uso: Inicializa el Smart Contract - Auction con: description, precio y tiempo
     constructor(string memory newMatch) {
-        
-        
-        
+        activeContract = true;
     }
 
-function createBet(uint256 result) public payable {
-    Bet2Peer betContract = new Bet2Peer(newMatch);
-}
+    function createBet(uint256 result) public payable {
+        Bet2Peer betContract = new Bet2Peer(originalGambler, newMatch ,result, originalBet, minimunCounterBet);
+    }
 
+    function isActive() public view returns (bool){
+        return (activeContract);
+    }
 
+    function getBets() public returns (address){
+        return();
+    }
+
+////////////////////////////Panic Functions////////////////////////
+    // Funcion
+    // Nombre: stopAuction
+    // Uso:    Para la subasta y devuelve el dinero al maximo postor
+    function stopAuction() public isOwner{
+        require(msg.sender == originalOwner, "You must be the original OWNER");
+        // Finaliza la subasta
+        activeContract = false;
+        // Devuelve el dinero al maximo postor
+        highestBidder.transfer(address(this).balance);
+        
+        // Se emite un evento
+        emit Status("La subasta se ha parado");
+    }
 }
