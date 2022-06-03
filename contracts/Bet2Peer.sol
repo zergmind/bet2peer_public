@@ -24,22 +24,15 @@ contract Bet2Peer is Ownable {
         visitorWin
     }
   
-    // ----------- Constructor -----------
-    // Uso: Inicializa el Smart Contract - Auction con: description, precio y tiempo
-    constructor(string memory newMatch) {
-        currentMatch = newMatch;
-        originalOwner = payable(msg.sender);
-        activeBet = true;
-        // Se emite un Evento
-        // emit Status(string(abi.encodePacked("Partido ", newMatch, " creado")));
+    constructor(address originalGambler, uint256 matchId, uint8 result, uint256 originalBet, uint256 minimumCounterBet) {
     }
 
 
 
 
 
-    function getAddress() onlyOwner public view returns (uint256)  {
-        return (totalBet);
+    function getContractAddress() onlyOwner public view returns (address)  {
+        return (address(this));
     }
    
 }

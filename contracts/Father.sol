@@ -25,9 +25,12 @@ contract Father {
         
     }
 
-function createBet(uint256 result) public payable {
-    Bet2Peer betContract = new Bet2Peer(newMatch);
-}
+    function createBet() public payable {
+    }
+
+    function removeBet(address originalOwner, uint256 matchId) public{
+        delete contractsByUserAndMatchId[originalOwner][matchId];
+    }
 
 
 }
