@@ -7,8 +7,7 @@
 
 pragma solidity 0.8.14;
 import "./Bet2Peer.sol";
-
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "../client/node_modules/@openzeppelin/contracts/access/Ownable.sol";
 // Informacion del Smart Contract
 // Nombre: Creador de Apuestas
 // Logica: Implementa la creación de contratos
