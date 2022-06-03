@@ -2,7 +2,7 @@ import React, { Component } from "react";
 // import SimpleStorageContract from "./contracts/SimpleStorage.son";
 import { Sidebar } from "./components/sidebar.js";
 import { Web3Service } from "./services/web3-service.js";
-// import { P2PService } from "./services/p2p-service.js";
+import { SportMonksService } from "./services/sportmonks-service.js";
 import { WebsocketService } from "./services/websocket-service.js";
 
 import "./App.css";
@@ -34,6 +34,9 @@ class App extends Component {
 
       const websocketService = new WebsocketService();
       websocketService.setReceiveMessage(this.receiveMessage);
+
+      const sportMonksService = new SportMonksService();
+      sportMonksService.getCurrentMatches();
 
       // const p2pService = new P2PService(accounts[0]);
       // p2pService.start();
