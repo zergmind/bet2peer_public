@@ -12,7 +12,7 @@ pragma solidity 0.8.14;
 // Logica: Implementa subasta de productos entre varios participantes
 
 // Declaracion del Smart Contract - Auction
-contract MatchBet {
+contract Bet2Peer {
     // ----------- Variables (datos) -----------
     string public currentMatch;
     enum resultType {
