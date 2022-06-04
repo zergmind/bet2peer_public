@@ -10,13 +10,15 @@ export class Web3Service {
   };
 
   getAccounts = async () => {
-    // await this.getWeb3();
     return this.web3.eth.getAccounts();
   };
 
   getNetworkId = async () => {
-    // await this.getWeb3();
     return this.web3.eth.net.getId();
+  };
+
+  getNetworkType = async () => {
+    return this.web3.eth.net.getNetworkType();
   };
 
   //EXTRAÍDO DEL EJEMPLO ORIGINAL

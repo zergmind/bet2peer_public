@@ -8,4 +8,11 @@ export class Bet2PeerService {
   createBet(matchId, quantity) {}
 
   getCurrentMatches() {}
+  //18165994, 18165993, 18166002, 18165998, 18166001, 18165997
+  getBetsForMatch(matchId) {
+    return fetch(
+      `./fake-data/current-bets-for-match-${matchId}.json`,
+      this.requestOptions
+    ).then((response) => response.json());
+  }
 }

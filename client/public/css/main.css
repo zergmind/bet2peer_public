@@ -1,0 +1,246 @@
+/* COLOR NEGRO DE FONDO #20182b 
+    COLOR VERDE #3bed58
+    COLOR MORADO-AZUL CLARO 	#768bb7
+    COLOR BLANCO 	#f7f7f7
+*/
+@font-face {
+    font-family: "Ubuntu Bold";
+    src: url('../fonts/Ubuntu-Bold.ttf');
+}
+@font-face {
+    font-family: "Ubuntu Regular";
+    src: url('../fonts/Ubuntu-Regular.ttf');
+}
+ul{
+    padding:0;
+}
+body{
+    background-color: #20182b;
+    color: 	#f7f7f7;
+    font-family: "Ubuntu Regular" !important;
+}
+li{
+    list-style: none;
+}
+.App
+{
+    display: grid;
+    grid-template-columns: 1fr auto;
+    width: 100%;
+    max-width: 100%;
+    padding-top: 16px;
+}
+.btn
+{
+    background: #3bed58;
+    color: #f7f7f7;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid #768bb7;
+    font-family: 'Ubuntu Bold';
+    font-size:16px;
+    cursor: pointer;
+}
+.header
+{
+    height: 15vh;
+    padding-top: 16px;
+}
+.header img{
+    height: inherit;
+}
+.user-profile-and-chat
+{
+    width:100%;
+    max-width: 300px;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    row-gap: 16px;
+    height: 100vh;
+    position: sticky;
+    padding-bottom: 16px;
+    
+}
+.chat
+{
+    display: grid;
+    grid-template-rows: 1fr auto;
+    border-radius: 8px;
+    border: 1px solid #768bb7;
+}
+.chat-form
+{
+    display: grid;
+    grid-template-rows: auto auto auto auto auto;
+}
+.match-and-bet-container
+{
+    margin: 0 16px 16px 16px;
+    border: 1px solid #768bb7;
+    border-radius: 8px;
+    padding-bottom: 16px;
+}
+.match-container{
+    display: grid;
+    grid-template-columns: auto auto 5% 35% 15%;
+    align-items: center;
+    /* border-top:1px solid #768bb7; */
+    padding-top: 16px;
+}
+show-or-hide-bets{
+    display: flex;
+}
+.team-local{
+    display: grid;
+    grid-template-columns: auto 48px;
+    grid-template-rows: 48px;
+    height: 48px;
+    align-items: center;
+}
+.team-local .team-name
+{
+    text-align: right;
+    padding-right: 16px;
+}
+.team-visitor
+{
+    display: grid;
+    grid-template-columns: 48px auto;
+    grid-template-rows: 48px;
+    height: 48px;
+    align-items: center;
+}
+.team-visitor .team-name
+{
+    text-align: left;
+    padding-left: 16px;
+}
+.team-local img, .team-visitor img {
+    height: inherit;
+}
+.bets-container
+{
+    padding:0;
+}
+.bet-container
+{
+    display: grid;
+    grid-template-columns: 35% 5% auto auto;
+    align-items: center;
+}
+.bet-opposite
+{
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    grid-template-columns: auto auto;
+}
+.bet-opposite img
+{
+    width: 22px;
+}
+
+.vs
+{
+    align-items: center;
+    justify-items: center;
+    display: grid;
+}
+.bet-quotas-container
+{
+    display: grid;
+    grid-template-columns: auto auto auto;
+    align-items: center;
+    justify-content: flex-start;
+}
+.bet-logo
+{
+    align-items: center;
+    display: grid;
+    justify-content: center;
+}
+.bet-logo img
+{
+    width: 28px;
+}
+.accept-bet-container
+{
+    padding-left: 16px;
+}
+.btn.accept-bet
+{
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 4px;
+    background: #768bb7;
+}
+.show-bets
+{
+    color:#3bed58;
+    cursor: pointer;
+    font-family: "Ubuntu Bold";   
+}
+.hide-bets
+{
+    color:#768bb7;
+    cursor: pointer;
+    font-family: "Ubuntu Bold";   
+}
+.popup-container{
+    width: 100vw;
+    height: 100vh;
+    /*  VERDE */
+    background-color: rgba(59, 237, 88, 0.3);
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: grid;
+    grid-template-columns: 30% 40% 30%;
+    
+}
+.popup-body-container
+{
+    margin-top: 30%;
+    background: #20182b;
+    display: grid;
+    grid-template-rows: auto;
+}
+.btn-create-bet
+{
+    margin-right:16px;
+}
+.user-profile{
+    display: grid;
+    grid-template-rows: auto auto auto;
+    border: 1px solid #768bb7;
+    border-radius: 8px;
+    padding: 8px;
+}
+.avatar-and-network
+{
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+}
+.avatar-and-network img
+{
+    width: 48px;
+}
+.user-account
+{
+    font-size: 12px;
+    text-overflow: ellipsis;
+}
+.second-column-container
+{
+    padding: 0 16px 0 0;
+}
+.textbox{
+    border-radius: 8px;
+    background: #768bb7;
+    font-family: "Ubuntu Regular" !important;
+    color: #f7f7f7;
+    font-size: 16px;
+    padding: 8px;
+    resize: none;
+}

@@ -1,0 +1,12 @@
+[
+  {
+    "contractAddress": "contract1",
+    "originalBet": 10,
+    "minimumOppositeBet": 15
+  },
+  {
+    "contractAddress": "contract2",
+    "originalBet": 10,
+    "minimumOppositeBet": 17
+  }
+]
