@@ -16,6 +16,7 @@ import "../client/node_modules/@openzeppelin/contracts/access/Ownable.sol";
 
 // Declaracion del Smart Contract - Auction
 contract Bet2Peer is Ownable {
+
     // ----------- Variables (datos) -----------
     enum resultType {
         draw,
@@ -24,15 +25,17 @@ contract Bet2Peer is Ownable {
     }
     uint256 public currentMatch;
     address payable originalOwner;
-    address counterGambler;
+    address payable counterGambler;
     uint8 result;
     uint256 origibalBet;
     uint256 minimumCounterBet;
+    address fatherAddress;
 
     bool activeBet;
     bool isAccepted;
 
     // ----------- Events -----------
+    event Status(string _message);
     event betCreated (
         string betCreated
     );
@@ -40,46 +43,126 @@ contract Bet2Peer is Ownable {
         string betAccepted
     );
 
-    /*
-     ----------- Constructor -----------
-    originalGambler: usuario que crea la apuesta
-    matchId: id del partido de la apuesta
-    result: resultado al que se apuesta
-    originalBet: cantidad apostada
-    minimumCounterBet: cantidad a percibir en caso de ganar
-    */
-    constructor(address _originalGambler, uint256 _matchId, uint8 _result, uint256 _originalBet, uint256 _minimumCounterBet) {
+    // ------------Modifiers ----------
+    modifier isParticipant(address sender) {
+        require(
+            sender == originalOwner || 
+            sender == counterGambler,
+            "No participas en esta apuesta"
+        );
+        _;
+    }
+    modifier isOriginalOwner(address sender) {
+        require(
+            sender == originalOwner,
+            "No eres el creador de la apuesta"
+        );
+        _;
+    }
+    modifier contractActive() {
+        require(
+            activeBet, 
+            "Esta apuesta no esta activa"
+            );
+        _;
+    }
+
+    // ----------- Constructor -----------
+    /**
+    _originalGambler: usuario que crea la apuesta
+    _matchId: id del partido de la apuesta
+    _result: resultado al que se apuesta
+    _originalBet: cantidad apostada
+    _minimumCounterBet: cantidad a percibir en caso de ganar
+    _fatherAddress: dirección del contrato padre
+     */
+    constructor(address _originalGambler, uint256 _matchId, uint8 _result, uint256 _originalBet, uint256 _minimumCounterBet, address _fatherAddress) {
         originalOwner = payable(_originalGambler);
         currentMatch = _matchId;
         result = _result;
         origibalBet = _originalBet;
         minimumCounterBet = _minimumCounterBet;
+        fatherAddress = _fatherAddress;
         activeBet = true;
         // Se emite un Evento
-        emit betCreated(string(abi.encodePacked("Partido ", _matchId, " creado")));
+        emit Status(string(abi.encodePacked("Partido ", _matchId, " creado")));
     }
 
-    function acceptBet() public payable {
+    // -------------------Functions ------------------
+    /**
+    Función para aceptar la apuesta de otro usuario
+     */
+    function acceptBet() public payable 
+        contractActive
+    {
         require(msg.value >= minimumCounterBet, "Apuesta insuficiente");
-        counterGambler = msg.sender;
-        emit betAccepted(string(abi.encodePacked(counterGambler, " accepted the bet of ", originalOwner)));
+        counterGambler = payable(msg.sender);
+        counterGambler.transfer(msg.value);
+
+        emit Status(string(abi.encodePacked(counterGambler, " ha aceptado la apuesta de ", originalOwner)));
     }
 
-    function resolveBet() public payable{
+    /**
+    Función para resulver una apuesta y repartir las ganancias
+     */
+    function resolveBet() public payable 
+        isParticipant(msg.sender)
+        contractActive 
+    {
+        require(isAccepted);
+        //TODO
+        //Hacemos la llamada a ChainLink
+        //comparamos result con el valor de ChainLink
+        if(result == 1 /*resultado de ChainLink*/) {
+            //transferimos las ganancias al originalOwner
+            originalOwner.transfer(address(this).balance);
+        }
+        else {
+            //transferimos las ganancias al counterGambler
+            counterGambler.transfer(address(this).balance);
+        }
         //desactivamos le contrato
         activeBet = false;
-        //transferimos las ganancias al usuario
-        originalOwner.transfer(address(this).balance);
+        //Emitimos el estatus
+        emit Status(string(abi.encodePacked("Apuesta ", getContractAddress(), " resuelta")));
     }
 
+    /**
+    Función que elimina la apuesta en caso de no estar aceptada
+    Returns: true si la apuesta se elimina correctamente
+     */
+    function removeBet() public payable 
+        isOriginalOwner(msg.sender)
+        contractActive
+        returns (bool)
+    {
+        require(!isAccepted, "La apuesta ya ha sido aceptada");
+        originalOwner.transfer(address(this).balance);
+        activeBet = false;
+        //Emitimos el estatus
+        emit Status(string(abi.encodePacked("Apuesta ", getContractAddress(), " eliminada")));
+        return true;
+    }
+
+    /**
+    Función que devuelve la dirección del contrato
+     */
     function getContractAddress() onlyOwner public view returns (address)  {
         return address(this);
     }
 
-    function removeBet() public payable onlyOwner{
-        require(!isAccepted, "La apuesta ya ha sido aceptada");
-        originalOwner.transfer(address(this).balance);
-        //delete contractsByMatchIdAndUser[originalOwner][matchId];
+    /**
+    Función que devuelve el id del partido
+     */
+    function getMatchId() public view returns(uint256){
+        return currentMatch;
+    }
+
+    /**
+    Función que devuelve la dirección del creador de la apuesta
+     */
+    function getOriginalOwner() public view returns(address) {
+        return originalOwner;
     }
    
 }
