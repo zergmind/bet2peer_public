@@ -9,6 +9,7 @@ export class Header extends Component {
           {this.props.showChat ? (
             <img
               src="/img/chat_icon3.png"
+              alt="mostrar chat"
               onClick={() => {
                 this.props.burgerMenuChange("chat");
               }}
@@ -17,6 +18,7 @@ export class Header extends Component {
           {this.props.showUser ? (
             <img
               src="/img/avatar.webp"
+              alt="mostrar usuario"
               onClick={() => {
                 this.props.burgerMenuChange("user");
               }}
@@ -25,6 +27,7 @@ export class Header extends Component {
           {this.props.showBets ? (
             <img
               src="/img/bet2peer_logo.png"
+              alt="mostrar apuestas"
               onClick={() => {
                 this.props.burgerMenuChange("bets");
               }}

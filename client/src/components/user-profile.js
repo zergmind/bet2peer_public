@@ -7,7 +7,7 @@ export class UserProfile extends Component {
         <div>Mi perfil</div>
         <div className="avatar-and-network">
           <div>
-            <img src="/img/avatar.webp"></img>
+            <img src="/img/avatar.webp" alt="perfil de usuario"></img>
           </div>
           <div>
             Red {this.props.networkType}({this.props.networkId})

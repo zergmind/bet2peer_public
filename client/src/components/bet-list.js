@@ -16,13 +16,17 @@ export class BetList extends Component {
             <li className="bet-container" key={bet.contractAddress}>
               <div className="empty-column"></div>
               <div className="bet-logo">
-                <img src="/img/bet2peer_logo.png"></img>
+                <img src="/img/bet2peer_logo.png" alt="logo"></img>
               </div>
               <div className="bet-quotas-container">
                 <div className="bet-opposite">
                   Apuesta &nbsp;
                   {bet.minimumOppositeBet} ETH
-                  <img className="bet-logo" src="/img/eth.png"></img>
+                  <img
+                    className="bet-logo"
+                    src="/img/eth.png"
+                    alt="logo ethereum"
+                  ></img>
                 </div>
                 <div> a una cuota de {this.getQuota(bet)}</div>
                 <div className="accept-bet-container">

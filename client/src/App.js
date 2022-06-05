@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 // import SimpleStorageContract from "./contracts/SimpleStorage.son";
-import { Sidebar } from "./components/sidebar.js";
 import { MatchList } from "./components/match-list.js";
 import { Header } from "./components/header.js";
 import { Web3Service } from "./services/web3-service.js";
@@ -9,7 +8,7 @@ import { WebsocketService } from "./services/websocket-service.js";
 import { Bet2PeerService } from "./services/bet2peer-service.js";
 
 import "./App.css";
-import { PopupCreateBet } from "./components/popup-create-bet.js";
+// import { PopupCreateBet } from "./components/popup-create-bet.js";
 import { UserProfileAndChat } from "./components/user-profile-and-chat.js";
 
 class App extends Component {
@@ -45,7 +44,7 @@ class App extends Component {
       websocketService.setReceiveMessage(this.receiveMessage);
 
       const sportMonksService = new SportMonksService();
-      var promise = sportMonksService.getCurrentMatches().then((data) => {
+      sportMonksService.getCurrentMatches().then((data) => {
         this.getBetsByMatches(data);
         this.setState({ matches: data });
       });
@@ -113,6 +112,8 @@ class App extends Component {
         break;
       case "bets":
         showBets = false;
+        break;
+      default:
         break;
     }
 

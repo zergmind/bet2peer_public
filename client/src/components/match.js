@@ -35,11 +35,14 @@ export class Match extends Component {
 
           <div className="team-local">
             <div className="team-name">{this.props.match.localName}</div>
-            <img src={this.props.match.localImageUrl} />
+            <img src={this.props.match.localImageUrl} alt="equipo_local" />
           </div>
           <div className="vs">vs</div>
           <div className="team-visitor">
-            <img src={this.props.match.visitorImageUrl} />
+            <img
+              src={this.props.match.visitorImageUrl}
+              alt="equipo_visitante"
+            />
             <div className="team-name">{this.props.match.visitorName}</div>
           </div>
           <div className="btn-create-bet">

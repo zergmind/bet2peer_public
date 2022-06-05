@@ -1,6 +1,6 @@
-import PropTypes from "prop-types";
-import Bet from "../models/bet";
-import * as Bet2PeerJSON from "../contracts/Bet2Peer.json";
+// import PropTypes from "prop-types";
+// import Bet from "../models/bet";
+// import * as Bet2PeerJSON from "../contracts/Bet2Peer.json";
 import Match from "../models/match.js";
 
 export class SportMonksService {
@@ -36,11 +36,6 @@ export class SportMonksService {
             return match;
           });
       });
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        return this.pastData;
-      }, 50);
-    });
     // return fetch(
     //   `${this.apiUrl}fixtures/between/2022-03-18/2022-03-20${this.apiToken}&include=visitorTeam,localTeam`,
     //   this.requestOptions
