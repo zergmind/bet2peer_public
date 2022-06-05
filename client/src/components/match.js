@@ -13,6 +13,7 @@ export class Match extends Component {
         <div className="match-container">
           {this.props.match.bets && this.props.match.bets.length > 0 ? (
             <div
+              className="show-bets"
               onClick={() => {
                 this.setState({ showBets: !this.state.showBets });
               }}
@@ -29,9 +30,7 @@ export class Match extends Component {
               )}
             </div>
           ) : (
-            <div className="show-or-hide-bets" disabled>
-              No hay apuestas
-            </div>
+            <div className="no-bets">No hay apuestas</div>
           )}
 
           <div className="team-local">

@@ -4,7 +4,7 @@ import { Match } from "./match.js";
 export class MatchList extends Component {
   render() {
     return (
-      <ul>
+      <ul className="match-list">
         {this.props.matches ? (
           this.props.matches.map((match) => (
             <li className="match-and-bet-container" key={match.id}>

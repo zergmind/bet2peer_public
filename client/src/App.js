@@ -22,6 +22,9 @@ class App extends Component {
     matches: null,
     messages: [],
     message: "",
+    showChat: true,
+    showUser: true,
+    showBets: false,
   };
   receiveMessage = (message) => {
     let { messages } = this.state;
@@ -52,6 +55,7 @@ class App extends Component {
       // p2pService.start();
 
       // this.setState({ web3Service, accounts });
+      debugger;
       this.setState({
         accounts,
         websocketService,
@@ -96,18 +100,42 @@ class App extends Component {
     });
   }
 
+  burgerMenuChange = (changeTo) => {
+    let showChat = true;
+    let showUser = true;
+    let showBets = true;
+    switch (changeTo) {
+      case "chat":
+        showChat = false;
+        break;
+      case "user":
+        showUser = false;
+        break;
+      case "bets":
+        showBets = false;
+        break;
+    }
+
+    this.setState({ showChat, showUser, showBets });
+  };
+
   render() {
     return (
       <div className="App">
-        <div>
-          <Header></Header>
+        <div className="first-container">
+          <Header
+            burgerMenuChange={this.burgerMenuChange}
+            showChat={this.state.showChat}
+            showUser={this.state.showUser}
+            showBets={this.state.showBets}
+          ></Header>
 
           <MatchList
             matches={this.state.matches}
             createBetFunction={this.createBet}
           ></MatchList>
         </div>
-        <div className="second-column-container">
+        <div className="second-container">
           <UserProfileAndChat
             networkId={this.state.networkId}
             networkType={this.state.networkType}

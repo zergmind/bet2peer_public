@@ -28,7 +28,6 @@ li{
     grid-template-columns: 1fr auto;
     width: 100%;
     max-width: 100%;
-    padding-top: 16px;
 }
 .btn
 {
@@ -43,11 +42,26 @@ li{
 }
 .header
 {
-    height: 15vh;
+    height: 10vh;
     padding-top: 16px;
+    text-align: left;
+    padding: 16px 16px 0 16px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: 10vh;
 }
 .header img{
     height: inherit;
+}
+.header .burger-menu
+{
+    display:none;
+    height: 100%;
+    align-items: center;
+}
+.header .burger-menu img
+{
+    cursor: pointer;
 }
 .user-profile-and-chat
 {
@@ -56,10 +70,9 @@ li{
     display: grid;
     grid-template-rows: auto 1fr;
     row-gap: 16px;
-    height: 100vh;
-    position: sticky;
-    padding-bottom: 16px;
-    
+    height: 100%;
+    padding: 16px 0;
+    box-sizing: border-box;
 }
 .chat
 {
@@ -67,6 +80,7 @@ li{
     grid-template-rows: 1fr auto;
     border-radius: 8px;
     border: 1px solid #768bb7;
+    padding: 8px;
 }
 .chat-form
 {
@@ -83,12 +97,26 @@ li{
 .match-container{
     display: grid;
     grid-template-columns: auto auto 5% 35% 15%;
-    align-items: center;
-    /* border-top:1px solid #768bb7; */
+    align-items: center;    
     padding-top: 16px;
+    grid-template-areas: "show-bets team-local vs team-visitor btn-create-bet"
 }
-show-or-hide-bets{
-    display: flex;
+.show-bets
+{
+    color:#3bed58;
+    cursor: pointer;
+}
+.hide-bets
+{
+    color:#768bb7;
+    cursor: pointer;
+}
+.show-bets, .hide-bets, .no-bets{
+    grid-area: show-bets;
+    font-family: "Ubuntu Bold";   
+    text-align: left;
+    padding-left: 8px;
+    font-size: 14px;
 }
 .team-local{
     display: grid;
@@ -96,6 +124,7 @@ show-or-hide-bets{
     grid-template-rows: 48px;
     height: 48px;
     align-items: center;
+    grid-area: team-local;
 }
 .team-local .team-name
 {
@@ -109,6 +138,7 @@ show-or-hide-bets{
     grid-template-rows: 48px;
     height: 48px;
     align-items: center;
+    grid-area: team-visitor;
 }
 .team-visitor .team-name
 {
@@ -117,6 +147,18 @@ show-or-hide-bets{
 }
 .team-local img, .team-visitor img {
     height: inherit;
+}
+.vs
+{
+    grid-area: vs;
+    align-items: center;
+    justify-items: center;
+    display: grid;
+}
+.btn-create-bet
+{
+    margin-right:16px;
+    grid-area: btn-create-bet;
 }
 .bets-container
 {
@@ -140,12 +182,7 @@ show-or-hide-bets{
     width: 22px;
 }
 
-.vs
-{
-    align-items: center;
-    justify-items: center;
-    display: grid;
-}
+
 .bet-quotas-container
 {
     display: grid;
@@ -174,18 +211,7 @@ show-or-hide-bets{
     border-radius: 4px;
     background: #768bb7;
 }
-.show-bets
-{
-    color:#3bed58;
-    cursor: pointer;
-    font-family: "Ubuntu Bold";   
-}
-.hide-bets
-{
-    color:#768bb7;
-    cursor: pointer;
-    font-family: "Ubuntu Bold";   
-}
+
 .popup-container{
     width: 100vw;
     height: 100vh;
@@ -205,10 +231,7 @@ show-or-hide-bets{
     display: grid;
     grid-template-rows: auto;
 }
-.btn-create-bet
-{
-    margin-right:16px;
-}
+
 .user-profile{
     display: grid;
     grid-template-rows: auto auto auto;
@@ -231,9 +254,13 @@ show-or-hide-bets{
     font-size: 12px;
     text-overflow: ellipsis;
 }
-.second-column-container
+.second-container
 {
     padding: 0 16px 0 0;
+    height:100vh;
+    max-height:100vh;
+    position: sticky;
+
 }
 .textbox{
     border-radius: 8px;
@@ -243,4 +270,46 @@ show-or-hide-bets{
     font-size: 16px;
     padding: 8px;
     resize: none;
+}
+.chat textarea.textbox
+{
+    border-radius: 8px 8px 0 0;
+}
+.chat .btn
+{
+    border-radius: 0 0 8px 8px;
+}
+
+@media(max-width: 1024px){
+    .second-container
+    {
+        display: none;
+    }
+    .header .burger-menu{
+        display:grid;
+        grid-template-columns: auto auto;
+        column-gap: 16px;
+        grid-template-rows: 100%;
+    }
+}
+
+@media(max-width: 768px){
+    .match-container
+    {
+        grid-template-columns: 40% 20% 40%;
+        row-gap:8px;
+        grid-template-areas:
+                        " team-local vs team-visitor "
+                        " show-bets show-bets btn-create-bet ";
+                                
+    }
+    .show-bets, .hide-bets, .no-bets
+    {
+        text-align: left;
+        padding-left: 16px;
+    }
+    .header {
+        height: 5vh;
+        grid-template-rows: 5vh;
+    }
 }
