@@ -18,7 +18,7 @@ export class SportMonksService {
       .then((response) => response.json())
       .then((parsedResponse) => {
         return parsedResponse.data
-          .filter((d) => d.league_id == this.laLigaId)
+          .filter((d) => d.league_id === this.laLigaId)
           .map((d) => {
             const localTeam = d.localTeam.data;
             const visitorTeam = d.visitorTeam.data;
