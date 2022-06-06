@@ -3,8 +3,8 @@ import { BetList } from "./bet-list";
 
 export class Match extends Component {
   componentDidMount = async () => {
-    const showBets = false;
-    this.setState({ showBets });
+    const showMatchBets = false;
+    this.setState({ showMatchBets });
   };
 
   render() {
@@ -15,10 +15,10 @@ export class Match extends Component {
             <div
               className="show-bets"
               onClick={() => {
-                this.setState({ showBets: !this.state.showBets });
+                this.setState({ showMatchBets: !this.state.showMatchBets });
               }}
             >
-              {this.state.showBets ? (
+              {this.state.showMatchBets ? (
                 <span className="hide-bets">
                   {" "}
                   Ocultar {this.props.match.bets.length} apuestas
@@ -54,7 +54,7 @@ export class Match extends Component {
             </button>
           </div>
         </div>
-        {this.state && this.state.showBets ? (
+        {this.state && this.state.showMatchBets ? (
           <BetList bets={this.props.match.bets}></BetList>
         ) : null}
       </div>

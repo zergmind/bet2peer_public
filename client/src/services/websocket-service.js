@@ -12,7 +12,7 @@ export class WebsocketService {
 
     this.socket.onmessage = (event) => {
       console.log(`[message] Data received from server: ${event.data}`);
-      this.receiveMessageFunction(event.data);
+      this.receiveMessageFunction(JSON.parse(event.data).message);
     };
 
     this.socket.onclose = (event) => {
@@ -31,8 +31,9 @@ export class WebsocketService {
       console.log(`[error] ${error.message}`);
     };
   }
-  sendMessage(messageText) {
-    const message = { action: "sendmessage", message: messageText };
+
+  sendMessage(messageData) {
+    const message = { action: "sendmessage", message: messageData };
     this.socket.send(JSON.stringify(message));
   }
 

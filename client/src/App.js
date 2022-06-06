@@ -2,6 +2,8 @@ import React, { Component } from "react";
 // import SimpleStorageContract from "./contracts/SimpleStorage.son";
 import { MatchList } from "./components/match-list.js";
 import { Header } from "./components/header.js";
+import { Chat } from "./components/chat";
+import { UserProfile } from "./components/user-profile";
 import { Web3Service } from "./services/web3-service.js";
 import { SportMonksService } from "./services/sportmonks-service.js";
 import { WebsocketService } from "./services/websocket-service.js";
@@ -20,26 +22,16 @@ class App extends Component {
     websocketService: null,
     matches: null,
     messages: [],
-    message: "",
-    showChat: true,
-    showUser: true,
-    showBets: false,
-  };
-  receiveMessage = (message) => {
-    let { messages } = this.state;
-    messages.push(message);
-    this.setState({ messages });
+    showChat: false,
+    showUser: false,
+    showBets: true,
   };
 
   componentDidMount = async () => {
     try {
       // Get network provider and web3 instance.
-      const web3Service = new Web3Service();
-      await web3Service.getWeb3();
-      const accounts = await web3Service.getAccounts();
-      const networkId = await web3Service.getNetworkId();
-      const networkType = await web3Service.getNetworkType();
 
+      await this.loadWeb3();
       const websocketService = new WebsocketService();
       websocketService.setReceiveMessage(this.receiveMessage);
 
@@ -50,25 +42,32 @@ class App extends Component {
       });
 
       const bet2peerService = new Bet2PeerService();
-      // const p2pService = new P2PService(accounts[0]);
-      // p2pService.start();
 
-      // this.setState({ web3Service, accounts });
-      debugger;
       this.setState({
-        accounts,
         websocketService,
-        networkId,
         bet2peerService,
-        networkType,
       });
     } catch (error) {
       // Catch any errors for any of the above operations.
-      alert(
-        `Failed to load web3, accounts, or contract. Check console for details.`
-      );
-      console.error(error);
     }
+  };
+
+  loadWeb3 = async () => {
+    try {
+      const web3Service = new Web3Service();
+      await web3Service.getWeb3();
+      const accounts = await web3Service.getAccounts();
+      const account = accounts[0];
+      const networkId = await web3Service.getNetworkId();
+      const networkType = await web3Service.getNetworkType();
+
+      this.setState({
+        accounts,
+        account,
+        networkId,
+        networkType,
+      });
+    } catch (error) {}
   };
 
   updateInputValue(event) {
@@ -79,10 +78,24 @@ class App extends Component {
     });
   }
 
-  sendMessage = async () => {
-    const { websocketService, message, messages } = this.state;
+  sendMessage = async (nickname, currentMessage) => {
+    const { websocketService, messages } = this.state;
+    const message = {
+      id: messages.length,
+      nickname: nickname,
+      content: currentMessage,
+    };
     messages.push(message);
     websocketService.sendMessage(message);
+
+    this.setState({ messages });
+  };
+
+  receiveMessage = (message) => {
+    let { messages } = this.state;
+    let messageToAdd = { id: messages.length, ...message };
+    messages.push(messageToAdd);
+    this.setState({ messages });
   };
 
   createBet(matchId) {
@@ -130,17 +143,35 @@ class App extends Component {
             showUser={this.state.showUser}
             showBets={this.state.showBets}
           ></Header>
-
-          <MatchList
-            matches={this.state.matches}
-            createBetFunction={this.createBet}
-          ></MatchList>
+          {/* PARA EL RESPONSIVE */}
+          {this.state.showBets ? (
+            <MatchList
+              matches={this.state.matches}
+              createBetFunction={this.createBet}
+            ></MatchList>
+          ) : null}
+          {this.props.showUser ? (
+            <UserProfile
+              networkId={this.props.networkId}
+              account={this.props.account}
+              networkType={this.props.networkType}
+            ></UserProfile>
+          ) : null}
+          {this.props.showChat ? (
+            <Chat
+              sendMessageFunction={this.sendMessage}
+              messages={this.state.messages}
+            ></Chat>
+          ) : null}
         </div>
+        {/* EN DESKTOP */}
         <div className="second-container">
           <UserProfileAndChat
             networkId={this.state.networkId}
             networkType={this.state.networkType}
             account={this.state.accounts ? this.state.accounts[0] : null}
+            messages={this.state.messages}
+            sendMessageFunction={this.sendMessage}
           ></UserProfileAndChat>
         </div>
         {/* <PopupCreateBet></PopupCreateBet> */}

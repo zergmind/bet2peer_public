@@ -5,19 +5,25 @@ export class UserProfile extends Component {
     return (
       <div className="user-profile">
         <div>Mi perfil</div>
-        <div className="avatar-and-network">
+        {this.props.account ? (
           <div>
-            <img src="/img/avatar.webp" alt="perfil de usuario"></img>
+            <div className="avatar-and-network">
+              <div>
+                <img src="/img/avatar.webp" alt="perfil de usuario"></img>
+              </div>
+              <div>
+                Red {this.props.networkType}({this.props.networkId})
+              </div>
+            </div>
+            <div className="user-account">
+              <div>{this.props.account}</div>
+            </div>
+            <div>Mis apuestas</div>
+            <div></div>
           </div>
-          <div>
-            Red {this.props.networkType}({this.props.networkId})
-          </div>
-        </div>
-        <div className="user-account">
-          <div>{this.props.account}</div>
-        </div>
-        <div>Mis apuestas</div>
-        <div></div>
+        ) : (
+          <div>Para ver tus apuestas conéctate a tu wallet</div>
+        )}
       </div>
     );
   }

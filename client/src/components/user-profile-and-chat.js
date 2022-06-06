@@ -11,7 +11,10 @@ export class UserProfileAndChat extends Component {
           account={this.props.account}
           networkType={this.props.networkType}
         ></UserProfile>
-        <Chat></Chat>
+        <Chat
+          sendMessageFunction={this.props.sendMessageFunction}
+          messages={this.props.messages}
+        ></Chat>
       </div>
     );
   }
