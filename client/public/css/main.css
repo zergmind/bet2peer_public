@@ -298,6 +298,7 @@ li{
     font-weight: bold;
     text-decoration: none;
     color: #333;
+    cursor: pointer;
   }
   .popup .close:hover {
     color: #3bed58;

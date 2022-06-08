@@ -10,9 +10,9 @@ export default ({ title, children, closeFunction }) => {
     <div class="overlay">
       <div class="popup">
         <h2>{title}</h2>
-        <a class="close" onClick={closeFunction}>
+        <span class="close" onClick={closeFunction}>
           &times;
-        </a>
+        </span>
         <div class="content">{children}</div>
       </div>
     </div>
