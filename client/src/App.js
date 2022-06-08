@@ -12,6 +12,7 @@ import { Bet2PeerService } from "./services/bet2peer-service.js";
 import "./App.css";
 // import { PopupCreateBet } from "./components/popup-create-bet.js";
 import { UserProfileAndChat } from "./components/user-profile-and-chat.js";
+import { PopupCreateBet } from "./components/popup-create-bet";
 
 class App extends Component {
   state = {
@@ -25,6 +26,8 @@ class App extends Component {
     showChat: false,
     showUser: false,
     showBets: true,
+    selectedMatchId: null,
+    showPopupCreateBet: false,
   };
 
   componentDidMount = async () => {
@@ -98,9 +101,13 @@ class App extends Component {
     this.setState({ messages });
   };
 
-  createBet(matchId) {
-    alert(matchId);
-  }
+  showPopupCreateBet = (matchId) => {
+    this.setState({ selectedMatchId: matchId, showPopupCreateBet: true });
+  };
+
+  closePopupCreateBet = () => {
+    this.setState({ showPopupCreateBet: false });
+  };
 
   getBetsByMatches(matches) {
     const { bet2peerService } = this.state;
@@ -147,7 +154,7 @@ class App extends Component {
           {this.state.showBets ? (
             <MatchList
               matches={this.state.matches}
-              createBetFunction={this.createBet}
+              showPopupCreateBetFunction={this.showPopupCreateBet}
             ></MatchList>
           ) : null}
           {this.props.showUser ? (
@@ -174,7 +181,18 @@ class App extends Component {
             sendMessageFunction={this.sendMessage}
           ></UserProfileAndChat>
         </div>
-        {/* <PopupCreateBet></PopupCreateBet> */}
+        {this.state.showPopupCreateBet ? (
+          <PopupCreateBet
+            matchId={this.state.selectedMatchId}
+            closePopupCreateBetFunction={this.closePopupCreateBet}
+          ></PopupCreateBet>
+        ) : null}
+        {/* {this.state.showPopupAcceptBet ? (
+          <PopupAcceptBet
+            betId={this.state.selectedBetId}
+            closePopupAcceptBetFunction={this.closePopupAcceptBet}
+          ></PopupAcceptBet>
+        ) : null} */}
       </div>
     );
   }

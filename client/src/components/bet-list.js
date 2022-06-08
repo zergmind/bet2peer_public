@@ -20,7 +20,6 @@ export class BetList extends Component {
               </div>
               <div className="bet-quotas-container">
                 <div className="bet-opposite">
-                  Apuesta &nbsp;
                   {bet.minimumOppositeBet} ETH
                   <img
                     className="bet-logo"
@@ -28,7 +27,7 @@ export class BetList extends Component {
                     alt="logo ethereum"
                   ></img>
                 </div>
-                <div> a una cuota de {this.getQuota(bet)}</div>
+                <div> a cuota {this.getQuota(bet)}</div>
                 <div className="accept-bet-container">
                   <button className="btn accept-bet">Aceptar</button>
                 </div>

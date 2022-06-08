@@ -48,7 +48,9 @@ export class Match extends Component {
           <div className="btn-create-bet">
             <button
               className="btn"
-              onClick={() => this.props.createBetFunction(this.props.match.id)}
+              onClick={() =>
+                this.props.showPopupCreateBetFunction(this.props.match.id)
+              }
             >
               Nueva apuesta
             </button>
