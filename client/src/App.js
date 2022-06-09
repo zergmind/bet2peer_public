@@ -13,6 +13,7 @@ import "./App.css";
 // import { PopupCreateBet } from "./components/popup-create-bet.js";
 import { UserProfileAndChat } from "./components/user-profile-and-chat.js";
 import { PopupCreateBet } from "./components/popup-create-bet";
+import { PopupAcceptBet } from "./components/popup-accept-bet";
 
 class App extends Component {
   state = {
@@ -28,6 +29,7 @@ class App extends Component {
     showBets: true,
     selectedMatchId: null,
     showPopupCreateBet: false,
+    showPopupAcceptBet: false,
   };
 
   componentDidMount = async () => {
@@ -73,14 +75,6 @@ class App extends Component {
     } catch (error) {}
   };
 
-  updateInputValue(event) {
-    const val = event.target.value;
-    // ...
-    this.setState({
-      message: val,
-    });
-  }
-
   sendMessage = async (nickname, currentMessage) => {
     const { websocketService, messages } = this.state;
     const message = {
@@ -101,12 +95,30 @@ class App extends Component {
     this.setState({ messages });
   };
 
-  showPopupCreateBet = (matchId) => {
-    this.setState({ selectedMatchId: matchId, showPopupCreateBet: true });
+  showPopupCreateBet = (match) => {
+    this.setState({ selectedMatch: match, showPopupCreateBet: true });
   };
 
   closePopupCreateBet = () => {
     this.setState({ showPopupCreateBet: false });
+  };
+
+  createBet = (bet) => {
+    this.setState({ showPopupCreateBet: false });
+  };
+
+  showPopupAcceptBet = (bet) => {
+    const { matches } = this.state;
+    bet.match = matches.find((match) => match.id == bet.matchId);
+    this.setState({ selectedBet: bet, showPopupAcceptBet: true });
+  };
+
+  closePopupAcceptBet = () => {
+    this.setState({ showPopupAcceptBet: false });
+  };
+
+  acceptBet = (bet) => {
+    this.setState({ showPopupAcceptBet: false });
   };
 
   getBetsByMatches(matches) {
@@ -155,6 +167,7 @@ class App extends Component {
             <MatchList
               matches={this.state.matches}
               showPopupCreateBetFunction={this.showPopupCreateBet}
+              showPopupAcceptBetFunction={this.showPopupAcceptBet}
             ></MatchList>
           ) : null}
           {this.props.showUser ? (
@@ -183,16 +196,18 @@ class App extends Component {
         </div>
         {this.state.showPopupCreateBet ? (
           <PopupCreateBet
-            matchId={this.state.selectedMatchId}
+            match={this.state.selectedMatch}
+            createBetFunction={this.createBet}
             closePopupCreateBetFunction={this.closePopupCreateBet}
           ></PopupCreateBet>
         ) : null}
-        {/* {this.state.showPopupAcceptBet ? (
+        {this.state.showPopupAcceptBet ? (
           <PopupAcceptBet
-            betId={this.state.selectedBetId}
+            bet={this.state.selectedBet}
+            acceptBetFunction={this.acceptBet}
             closePopupAcceptBetFunction={this.closePopupAcceptBet}
           ></PopupAcceptBet>
-        ) : null} */}
+        ) : null}
       </div>
     );
   }

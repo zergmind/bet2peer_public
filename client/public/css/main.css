@@ -276,32 +276,36 @@ li{
   }
   
   .popup {
-    margin: 70px auto;
+    margin: 72px auto;
     padding: 20px;
-    background: #768bb7;
-    border-radius: 5px;
-    width: 30%;
+    background: #20182b;
+    border-radius: 4px;
+    width: 50%;
     position: relative;
     transition: all 5s ease-in-out;
   }
-  
+  .popup .header
+  {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;  
+      margin: 0;  
+      padding: 0;
+  }
   .popup h2 {
-    margin-top: 0;
-    color: #333;
+    margin: 0;
+    color: #3bed58;
   }
   .popup .close {
-    position: absolute;
-    top: 20px;
-    right: 30px;
     transition: all 200ms;
     font-size: 30px;
     font-weight: bold;
     text-decoration: none;
-    color: #333;
+    color: #3bed58;
     cursor: pointer;
   }
   .popup .close:hover {
-    color: #3bed58;
+    color: #768bb7;
   }
   .popup .content {
     max-height: 30%;

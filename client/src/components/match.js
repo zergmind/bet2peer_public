@@ -32,7 +32,7 @@ export class Match extends Component {
           ) : (
             <div className="no-bets">No hay apuestas</div>
           )}
-
+          {/* ESTO ESTÁ DUPLICADO EN MATCH DESCRIPTION MEJORAR EN EL FUTURO */}
           <div className="team-local">
             <div className="team-name">{this.props.match.localName}</div>
             <img src={this.props.match.localImageUrl} alt="equipo_local" />
@@ -49,7 +49,7 @@ export class Match extends Component {
             <button
               className="btn"
               onClick={() =>
-                this.props.showPopupCreateBetFunction(this.props.match.id)
+                this.props.showPopupCreateBetFunction(this.props.match)
               }
             >
               Nueva apuesta
@@ -57,7 +57,10 @@ export class Match extends Component {
           </div>
         </div>
         {this.state && this.state.showMatchBets ? (
-          <BetList bets={this.props.match.bets}></BetList>
+          <BetList
+            bets={this.props.match.bets}
+            showPopupAcceptBetFunction={this.props.showPopupAcceptBetFunction}
+          ></BetList>
         ) : null}
       </div>
     );

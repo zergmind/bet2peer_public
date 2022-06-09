@@ -9,6 +9,9 @@ export class MatchList extends Component {
           this.props.matches.map((match) => (
             <li className="match-and-bet-container" key={match.id}>
               <Match
+                showPopupAcceptBetFunction={
+                  this.props.showPopupAcceptBetFunction
+                }
                 showPopupCreateBetFunction={
                   this.props.showPopupCreateBetFunction
                 }

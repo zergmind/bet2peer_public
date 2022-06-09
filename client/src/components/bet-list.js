@@ -29,7 +29,14 @@ export class BetList extends Component {
                 </div>
                 <div> a cuota {this.getQuota(bet)}</div>
                 <div className="accept-bet-container">
-                  <button className="btn accept-bet">Aceptar</button>
+                  <button
+                    className="btn accept-bet"
+                    onClick={() => {
+                      this.props.showPopupAcceptBetFunction(bet);
+                    }}
+                  >
+                    Aceptar
+                  </button>
                 </div>
               </div>
             </li>
