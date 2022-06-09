@@ -109,7 +109,7 @@ class App extends Component {
 
   showPopupAcceptBet = (bet) => {
     const { matches } = this.state;
-    bet.match = matches.find((match) => match.id == bet.matchId);
+    bet.match = matches.find((match) => match.id === bet.matchId);
     this.setState({ selectedBet: bet, showPopupAcceptBet: true });
   };
 
