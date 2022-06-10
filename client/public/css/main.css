@@ -1,8 +1,8 @@
 /* COLOR NEGRO DE FONDO #181818 
     COLOR MORADO-NEGRO #120e19
     COLOR VERDE #3bed58
-    COLOR MORADO-AZUL CLARO 	#554772
-    COLOR BLANCO 	#f7f7f7
+    COLOR MORADO-AZUL CLARO #554772
+    COLOR BLANCO #f7f7f7
 */
 
 @font-face {
@@ -82,7 +82,7 @@ li{
     width:100%;
     max-width: 300px;
     display: grid;
-    grid-template-rows: auto 1fr;
+    grid-template-rows: auto 1fr auto;
     row-gap: 16px;
     height: 100%;
     padding: 16px 0;
@@ -95,6 +95,7 @@ li{
     border-radius: 8px;
     border: 1px solid #554772;
     padding: 8px;
+    overflow: auto;
 }
 .chat-form
 {
@@ -262,9 +263,9 @@ li{
 }
 .textbox{
     border-radius: 8px;
-    background: #554772;
-    font-family: "Lato Light" !important;
-    color: #f7f7f7;
+    background: #f7f7f7;
+    font-family: "Lato Bold" !important;
+    color: #554772;
     font-size: 16px;
     padding: 8px;
     resize: none;
@@ -297,12 +298,13 @@ li{
   
   .popup {
     margin: 72px auto;
-    padding: 20px;
+    padding: 0 32px 32px 32px;
     background: #181818;
     border-radius: 4px;
     width: 50%;
     position: relative;
     transition: all 5s ease-in-out;
+    box-shadow: 2px 2px 4px 2px rgb(59 237 88 / 66%);
   }
   .popup .header
   {
@@ -373,6 +375,27 @@ li{
     }
 }
 
+::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #181818;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    width: 4px;
+    max-height:32px;
+    background: #3bed58;
+    border-radius: 4px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #554772;
+  }
 
   
   

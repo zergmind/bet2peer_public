@@ -18,13 +18,11 @@ export class Chat extends Component {
 
   sendMessage = async () => {
     const { nickname, currrentMessage } = this.state;
-    if(nickname == ""){
+    if (nickname == "") {
       alert("Empty Nickname");
-    }
-    else if (currrentMessage=="") {
+    } else if (currrentMessage == "") {
       alert("Empty message");
-    }
-    else {
+    } else {
       this.props.sendMessageFunction(nickname, currrentMessage);
     }
   };
@@ -42,23 +40,25 @@ export class Chat extends Component {
               ))
             : null}
         </div>
-        <div className="chat-form">
-          <div>Nombre</div>
-          <input
-            type="text"
-            className="textbox"
-            onChange={this.storeNickname}
-          ></input>
-          <div>Mensaje</div>
-          <textarea
-            className="textbox"
-            onChange={this.storeCurrentMessage}
-          ></textarea>
-          <button className="btn" onClick={this.sendMessage}>
-            Enviar
-          </button>
-        </div>
       </div>
+
+      //   <div className="chat-form">
+      //     <div>Nombre</div>
+      //     <input
+      //       type="text"
+      //       className="textbox"
+      //       onChange={this.storeNickname}
+      //     ></input>
+      //     <div>Mensaje</div>
+      //     <textarea
+      //       className="textbox"
+      //       onChange={this.storeCurrentMessage}
+      //     ></textarea>
+      //     <button className="btn" onClick={this.sendMessage}>
+      //       Enviar
+      //     </button>
+      //   </div>
+      // </div>
     );
   }
 }

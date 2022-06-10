@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { MatchList } from "./components/match-list.js";
 import { Header } from "./components/header.js";
 import { Chat } from "./components/chat";
+import { ChatForm } from "./components/chat-form";
 import { UserProfile } from "./components/user-profile";
 import { Web3Service } from "./services/web3-service.js";
 import { SportMonksService } from "./services/sportmonks-service.js";
@@ -178,10 +179,10 @@ class App extends Component {
             ></UserProfile>
           ) : null}
           {this.props.showChat ? (
-            <Chat
-              sendMessageFunction={this.sendMessage}
-              messages={this.state.messages}
-            ></Chat>
+            <Chat messages={this.state.messages}></Chat>
+          ) : null}
+          {this.props.showChat ? (
+            <ChatForm sendMessageFunction={this.sendMessage}></ChatForm>
           ) : null}
         </div>
         {/* EN DESKTOP */}
