@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Chat } from "./chat";
+import { ChatForm } from "./chat-form";
 import { UserProfile } from "./user-profile";
 
 export class UserProfileAndChat extends Component {
@@ -11,10 +12,10 @@ export class UserProfileAndChat extends Component {
           account={this.props.account}
           networkType={this.props.networkType}
         ></UserProfile>
-        <Chat
+        <Chat messages={this.props.messages}></Chat>
+        <ChatForm
           sendMessageFunction={this.props.sendMessageFunction}
-          messages={this.props.messages}
-        ></Chat>
+        ></ChatForm>
       </div>
     );
   }

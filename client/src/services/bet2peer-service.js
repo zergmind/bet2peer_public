@@ -5,6 +5,11 @@ import * as Bet2PeerJSON from "../contracts/Bet2Peer.json";
 export class Bet2PeerService {
   contractABI = Bet2PeerJSON.abi;
   contractAddress = "";
+  web3;
+  constructor(web3Service) {
+    this.web3 = web3Service.getWeb3();
+  }
+
   createBet(matchId, quantity) {}
 
   getCurrentMatches() {}
@@ -15,4 +20,8 @@ export class Bet2PeerService {
       this.requestOptions
     ).then((response) => response.json());
   }
+
+  createBetInContract = () => {};
+
+  acceptBetInContract = () => {};
 }
