@@ -1,23 +1,37 @@
-/* COLOR NEGRO DE FONDO #20182b 
+/* COLOR NEGRO DE FONDO #181818 
+    COLOR MORADO-NEGRO #120e19
     COLOR VERDE #3bed58
-    COLOR MORADO-AZUL CLARO 	#768bb7
+    COLOR MORADO-AZUL CLARO 	#554772
     COLOR BLANCO 	#f7f7f7
 */
+
 @font-face {
-    font-family: "Ubuntu Bold";
-    src: url('../fonts/Ubuntu-Bold.ttf');
+    font-family: "Maven Pro Bold";
+    src: url('../fonts/MavenPro-Bold.ttf');
 }
 @font-face {
-    font-family: "Ubuntu Regular";
-    src: url('../fonts/Ubuntu-Regular.ttf');
+    font-family: "Maven Pro Regular";
+    src: url('../fonts/MavenPro-Regular.ttf');
 }
+@font-face {
+    font-family: "Lato Bold";
+    src: url('../fonts/Lato-Bold.ttf');
+}
+@font-face {
+    font-family: "Lato Light";
+    src: url('../fonts/Lato-Light.ttf');
+}
+/* PARA ARREGLAR EL PROBLEMA DE LOS INPUTS QUE SE EXCEDÍAN EN ANCHO */
+:root { box-sizing: border-box; }
+*, *::before, *::after, *::marker { box-sizing: inherit; }
+
 ul{
     padding:0;
 }
 body{
-    background-color: #20182b;
+    background-color: #181818;
     color: 	#f7f7f7;
-    font-family: "Ubuntu Regular" !important;
+    font-family: "Lato Light" !important;
 }
 li{
     list-style: none;
@@ -28,6 +42,7 @@ li{
     grid-template-columns: 1fr auto;
     width: 100%;
     max-width: 100%;
+    text-align: left !important;
 }
 .btn
 {
@@ -35,17 +50,16 @@ li{
     color: #f7f7f7;
     padding: 8px 16px;
     border-radius: 8px;
-    border: 1px solid #768bb7;
-    font-family: 'Ubuntu Bold';
+    border: 1px solid #554772;
+    font-family: 'Maven Pro Regular';
     font-size:16px;
     cursor: pointer;
 }
 .header
 {
     height: 10vh;
-    padding-top: 16px;
     text-align: left;
-    padding: 16px 16px 0 16px;
+    padding: 16px 16px 0 0;
     display: grid;
     grid-template-columns: 1fr auto;
     grid-template-rows: 10vh;
@@ -79,7 +93,7 @@ li{
     display: grid;
     grid-template-rows: 1fr auto;
     border-radius: 8px;
-    border: 1px solid #768bb7;
+    border: 1px solid #554772;
     padding: 8px;
 }
 .chat-form
@@ -90,7 +104,8 @@ li{
 .match-and-bet-container
 {
     margin: 0 16px 16px 16px;
-    border: 1px solid #768bb7;
+    border: 1px solid #554772;
+    background-color: #120e19;
     border-radius: 8px;
     padding-bottom: 16px;
 }
@@ -108,15 +123,19 @@ li{
 }
 .hide-bets
 {
-    color:#768bb7;
+    color:#554772;
     cursor: pointer;
 }
 .show-bets, .hide-bets, .no-bets{
     grid-area: show-bets;
-    font-family: "Ubuntu Bold";   
+    font-family: "Maven Pro Bold";   
     text-align: left;
-    padding-left: 8px;
+    padding-left: 16px;
     font-size: 14px;
+}
+.team-name, .vs
+{
+    font-family: 'Lato Bold';
 }
 .team-local{
     display: grid;
@@ -198,7 +217,7 @@ li{
 }
 .bet-logo img
 {
-    width: 28px;
+    width: 100%;
 }
 .accept-bet-container
 {
@@ -209,12 +228,12 @@ li{
     padding: 4px 8px;
     font-size: 12px;
     border-radius: 4px;
-    background: #768bb7;
+    background: #554772;
 }
 .user-profile{
     display: grid;
     grid-template-rows: auto auto auto;
-    border: 1px solid #768bb7;
+    border: 1px solid #554772;
     border-radius: 8px;
     padding: 8px;
 }
@@ -243,12 +262,13 @@ li{
 }
 .textbox{
     border-radius: 8px;
-    background: #768bb7;
-    font-family: "Ubuntu Regular" !important;
+    background: #554772;
+    font-family: "Lato Light" !important;
     color: #f7f7f7;
     font-size: 16px;
     padding: 8px;
     resize: none;
+    width:100%;
 }
 .chat textarea.textbox
 {
@@ -278,7 +298,7 @@ li{
   .popup {
     margin: 72px auto;
     padding: 20px;
-    background: #20182b;
+    background: #181818;
     border-radius: 4px;
     width: 50%;
     position: relative;
@@ -305,7 +325,7 @@ li{
     cursor: pointer;
   }
   .popup .close:hover {
-    color: #768bb7;
+    color: #554772;
   }
   .popup .content {
     max-height: 30%;
@@ -341,8 +361,8 @@ li{
         padding-left: 16px;
     }
     .header {
-        height: 5vh;
-        grid-template-rows: 5vh;
+        height: 10vh;
+        grid-template-rows: 10vh;
     }
     .bet-container {
         grid-template-columns: auto auto auto auto;

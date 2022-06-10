@@ -52,11 +52,19 @@ export class PopupCreateBet extends Component {
         <div>
           <div className="create-bet-your-bet">
             <div>Tu apuesta...</div>
-            <input type="number" onChange={this.quantityChange}></input>
+            <input
+              type="number"
+              className="textbox"
+              onChange={this.quantityChange}
+            ></input>
           </div>
           <div className="create-bet-quota">
             <div>A una cuota de...</div>
-            <input type="number" onChange={this.quotaChange}></input>
+            <input
+              type="number"
+              className="textbox"
+              onChange={this.quotaChange}
+            ></input>
           </div>
           <div className="create-bet-results">
             <div>Al resultado...</div>

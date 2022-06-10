@@ -24,9 +24,7 @@ export class Match extends Component {
                   Ocultar {this.props.match.bets.length} apuestas
                 </span>
               ) : (
-                <span className="show-bets">
-                  Mostrar {this.props.match.bets.length} apuestas
-                </span>
+                <span>Mostrar {this.props.match.bets.length} apuestas</span>
               )}
             </div>
           ) : (

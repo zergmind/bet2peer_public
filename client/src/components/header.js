@@ -4,7 +4,10 @@ export class Header extends Component {
   render() {
     return (
       <div className="header">
-        <img src="/img/bet2peer_logo_letras.png" alt="logo con letras"></img>
+        <img
+          src="/img/logos/png/flat/principal-color.png"
+          alt="logo con letras"
+        ></img>
         <div className="burger-menu">
           {this.props.showChat ? (
             <img
@@ -26,7 +29,7 @@ export class Header extends Component {
           ) : null}
           {this.props.showBets ? (
             <img
-              src="/img/bet2peer_logo.png"
+              src="/img/logos/png/flat/imago-tipo-color.png"
               alt="mostrar apuestas"
               onClick={() => {
                 this.props.burgerMenuChange("bets");
