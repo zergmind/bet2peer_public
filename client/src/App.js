@@ -20,6 +20,7 @@ class App extends Component {
   state = {
     storageValue: 0,
     web3Service: null,
+    bet2peerService: null,
     accounts: null,
     contract: null,
     websocketService: null,
@@ -37,7 +38,7 @@ class App extends Component {
     try {
       // Get network provider and web3 instance.
 
-      await this.loadWeb3();
+      await this.loadWeb3AndBet2PeerService();
       const websocketService = new WebsocketService();
       websocketService.setReceiveMessage(this.receiveMessage);
 
@@ -47,18 +48,15 @@ class App extends Component {
         this.setState({ matches: data });
       });
 
-      const bet2peerService = new Bet2PeerService();
-
       this.setState({
         websocketService,
-        bet2peerService,
       });
     } catch (error) {
       // Catch any errors for any of the above operations.
     }
   };
 
-  loadWeb3 = async () => {
+  loadWeb3AndBet2PeerService = async () => {
     try {
       const web3Service = new Web3Service();
       await web3Service.getWeb3();
@@ -67,14 +65,19 @@ class App extends Component {
       const networkId = await web3Service.getNetworkId();
       const networkType = await web3Service.getNetworkType();
 
+      const bet2peerService = new Bet2PeerService(web3Service);
+
       this.setState({
         accounts,
         account,
         networkId,
         networkType,
+        bet2peerService,
       });
     } catch (error) {}
   };
+
+  loadBet2PeerService = () => {};
 
   sendMessage = async (nickname, currentMessage) => {
     const { websocketService, messages } = this.state;
@@ -105,6 +108,7 @@ class App extends Component {
   };
 
   createBet = (bet) => {
+    const { bet2peerService } = this.state;
     this.setState({ showPopupCreateBet: false });
   };
 
@@ -119,6 +123,7 @@ class App extends Component {
   };
 
   acceptBet = (bet) => {
+    const { bet2peerService } = this.state;
     this.setState({ showPopupAcceptBet: false });
   };
 
