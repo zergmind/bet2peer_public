@@ -18,10 +18,10 @@ export class Chat extends Component {
 
   sendMessage = async () => {
     const { nickname, currrentMessage } = this.state;
-    if(nickname == ""){
+    if(nickname === ""){
       alert("Empty Nickname");
     }
-    else if (currrentMessage=="") {
+    else if (currrentMessage === "") {
       alert("Empty message");
     }
     else {
