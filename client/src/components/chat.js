@@ -18,7 +18,15 @@ export class Chat extends Component {
 
   sendMessage = async () => {
     const { nickname, currrentMessage } = this.state;
-    this.props.sendMessageFunction(nickname, currrentMessage);
+    if(nickname == ""){
+      alert("Empty Nickname");
+    }
+    else if (currrentMessage=="") {
+      alert("Empty message");
+    }
+    else {
+      this.props.sendMessageFunction(nickname, currrentMessage);
+    }
   };
 
   render() {
