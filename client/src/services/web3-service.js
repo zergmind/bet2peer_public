@@ -7,7 +7,6 @@ export class Web3Service {
     if (!this.web3) {
       this.web3 = await getWeb3();
     }
-
     return this.web3;
   };
 

@@ -109,8 +109,8 @@ class App extends Component {
   };
 
   createBet = (bet) => {
-    const { bet2peerService } = this.state;
-    bet2peerService.createBet(bet);
+    const { bet2peerService, account } = this.state;
+    bet2peerService.createBet(bet, account);
     this.setState({ showPopupCreateBet: false });
   };
 

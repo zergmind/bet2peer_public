@@ -67,6 +67,7 @@ contract Father {
         //Añado la dirección del contrato a los mapas del usuario y del partido
         contractsByUser[msg.sender].push(bet.getContractAddress());
         contractsByMatchId[_matchId].push(bet.getContractAddress());
+        emit Status("Bet created");
     }
 
     /**
