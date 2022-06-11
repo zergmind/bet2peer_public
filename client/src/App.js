@@ -64,8 +64,9 @@ class App extends Component {
       const account = accounts[0];
       const networkId = await web3Service.getNetworkId();
       const networkType = await web3Service.getNetworkType();
-
-      const bet2peerService = new Bet2PeerService(web3Service);
+  
+      const bet2peerService = new Bet2PeerService();
+      bet2peerService.configureService(web3Service);
 
       this.setState({
         accounts,
@@ -109,6 +110,7 @@ class App extends Component {
 
   createBet = (bet) => {
     const { bet2peerService } = this.state;
+    bet2peerService.createBet(bet);
     this.setState({ showPopupCreateBet: false });
   };
 

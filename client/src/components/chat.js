@@ -27,13 +27,6 @@ export class Chat extends Component {
       this.props.sendMessageFunction(nickname, currrentMessage);
     }
   };
-  
-  handleKeyDown = (event) => {
-     if(event.which === 13 && !event.shiftKey){
-       this.sendMessage();
-       document.getElementById("textarea").value = "";
-     }
-  };
 
   render() {
     return (
