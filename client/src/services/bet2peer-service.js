@@ -1,6 +1,6 @@
 // import PropTypes from "prop-types";
 // import Bet from "../models/bet";
-import * as Bet2PeerJSON from "../contracts/Bet2Peer.json";
+// import * as Bet2PeerJSON from "../contracts/Bet2Peer.json";
 import * as FatherJSON from "../contracts/Father.json";
 
 export class Bet2PeerService {
@@ -9,7 +9,7 @@ export class Bet2PeerService {
   fatherContractAddress = "0x2589Ed6b23c390d3F2cEb215C64feFbaB4342591";
   web3;
   fatherContract;
-  constructor() {}
+  // constructor() {}
 
   configureService = async (web3Service) => {
     this.web3 = await web3Service.getWeb3();

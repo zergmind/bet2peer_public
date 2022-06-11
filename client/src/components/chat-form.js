@@ -18,9 +18,9 @@ export class ChatForm extends Component {
 
   sendMessage = async () => {
     const { nickname, currrentMessage } = this.state;
-    if (nickname.trim() == "") {
+    if (nickname.trim() === "") {
       alert("Empty Nickname");
-    } else if (currrentMessage.trim() == "") {
+    } else if (currrentMessage.trim() === "") {
       alert("Empty message");
     } else {
       this.props.sendMessageFunction(nickname, currrentMessage);
@@ -28,7 +28,7 @@ export class ChatForm extends Component {
   };
 
   handleKeyDown = (event) => {
-    if(event.which === 13 && !event.shiftKey){
+    if (event.which === 13 && !event.shiftKey) {
       this.sendMessage();
       document.getElementById("textarea").value = "";
     }
