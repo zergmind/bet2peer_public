@@ -21,24 +21,23 @@ export class Bet2PeerService {
 
   createBet = async (bet, account) => {
     console.log(account);
+    if (!this.fatherContract) return;
     const minimumCounterBet = bet.quantity * bet.quota;
-    this.fatherContract.methods.createBet(
-      bet.match.id,
-      bet.result,
-      bet.quantity,
-      minimumCounterBet
-    ).send({ from: account, value: bet.quantity });
+    const amountToSend = this.web3.utils.toWei(bet.quantity, "ether");
+    this.fatherContract.methods
+      .createBet(bet.match.id, bet.result, bet.quantity, minimumCounterBet)
+      .send({ from: account, value: amountToSend });
 
-    if (!this.fatherContract) return
-    this.fatherContract.events.Status([])
+    this.fatherContract.events
+      .Status([])
       .on("connected", function (subscriptionId) {
-        console.log("New subscription with ID: " + subscriptionId)
+        console.log("New subscription with ID: " + subscriptionId);
       })
-      .on('data', function (event) {
-        console.log("New event:")
-        console.log(event)
-        alert("New bet 🤑 💰 💸")
-      })
+      .on("data", function (event) {
+        console.log("New event:");
+        console.log(event);
+        alert("New bet 🤑 💰 💸");
+      });
   };
 
   getCurrentMatches() {}
