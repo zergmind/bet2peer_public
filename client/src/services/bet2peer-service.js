@@ -13,7 +13,7 @@ export class Bet2PeerService {
 
   configureService = async (web3Service) => {
     this.web3 = await web3Service.getWeb3();
-    this.fatherContract = new this.web3.eth.Contract(
+    this.fatherContract = await new this.web3.eth.Contract(
       this.fatherContractABI,
       this.fatherContractAddress
     );
@@ -38,6 +38,10 @@ export class Bet2PeerService {
         console.log(event);
         alert("New bet 🤑 💰 💸");
       });
+  };
+
+  getBetsByAccount = async (account) => {
+    return await this.fatherContract.methods.getAllBetsByUser(account).call();
   };
 
   getCurrentMatches() {}
