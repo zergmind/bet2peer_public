@@ -64,7 +64,7 @@ class App extends Component {
       const account = accounts[0];
       const networkId = await web3Service.getNetworkId();
       const networkType = await web3Service.getNetworkType();
-  
+
       const bet2peerService = new Bet2PeerService();
       bet2peerService.configureService(web3Service);
 

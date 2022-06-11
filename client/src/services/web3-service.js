@@ -4,9 +4,11 @@ export class Web3Service {
   web3;
 
   getWeb3 = async () => {
-    if (!this.web) {
+    if (!this.web3) {
       this.web3 = await getWeb3();
     }
+
+    return this.web3;
   };
 
   getAccounts = async () => {
