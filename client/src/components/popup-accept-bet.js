@@ -19,6 +19,8 @@ export class PopupAcceptBet extends Component {
         return ` no gana el ${this.props.bet.match.localName}`;
       case 2:
         return ` no gana el ${this.props.bet.match.visitorName}`;
+      default:
+        return "";
     }
   };
 

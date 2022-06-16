@@ -16,6 +16,8 @@ export class BetList extends Component {
         return ` no gana el ${bet.match.localName} `;
       case 2:
         return ` no gana el ${bet.match.visitorName} `;
+      default:
+        return "";
     }
   };
 
