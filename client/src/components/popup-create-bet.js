@@ -83,7 +83,7 @@ export class PopupCreateBet extends Component {
               </div>
             </div>
           </div>
-          <div>
+          <div className="btn-container">
             <button className="btn" onClick={this.createBet}>
               Aceptar
             </button>

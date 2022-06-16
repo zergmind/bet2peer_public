@@ -1,12 +1,23 @@
 import React, { Component } from "react";
 
 export class BetList extends Component {
-  getQuota(bet) {
+  getQuota = (bet) => {
     const ratio = bet.minimumOppositeBet / bet.originalBet;
     const ratioPlusOwnBet = ratio + 1;
 
     return ratioPlusOwnBet.toFixed(2);
-  }
+  };
+
+  getTypeOfBetResult = (bet) => {
+    switch (bet.result) {
+      case 0: //EMPATA
+        return " no empatan ";
+      case 1:
+        return ` no gana el ${bet.match.localName} `;
+      case 2:
+        return ` no gana el ${bet.match.visitorName} `;
+    }
+  };
 
   render() {
     return (
@@ -30,6 +41,7 @@ export class BetList extends Component {
                     alt="logo ethereum"
                   ></img>
                 </div>
+                <div>{this.getTypeOfBetResult(bet)} &nbsp;</div>
                 <div> a cuota {this.getQuota(bet)}</div>
                 <div className="accept-bet-container">
                   <button

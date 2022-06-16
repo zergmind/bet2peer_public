@@ -201,12 +201,10 @@ li{
 {
     width: 22px;
 }
-
-
 .bet-quotas-container
 {
     display: grid;
-    grid-template-columns: auto auto auto;
+    grid-template-columns: auto auto auto auto;
     align-items: center;
     justify-content: flex-start;
 }
@@ -215,6 +213,7 @@ li{
     align-items: center;
     display: grid;
     justify-content: center;
+    max-width: 8rem;
 }
 .bet-logo img
 {
@@ -333,7 +332,20 @@ li{
     max-height: 30%;
     overflow: auto;
   }
-
+.btn-container
+{
+    display: grid;
+    justify-content: flex-end;
+}
+.accept-description-container{
+    display: grid;
+    grid-template-columns: auto auto auto;
+}
+.accept-description
+{
+    display: grid;
+    grid-template-columns: auto 1fr;
+}
 @media(max-width: 1024px){
     .second-container
     {

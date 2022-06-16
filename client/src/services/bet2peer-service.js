@@ -22,26 +22,32 @@ export class Bet2PeerService {
   createBet = async (bet, account) => {
     console.log(account);
     if (!this.fatherContract) return;
+
     const minimumCounterBet = bet.quantity * bet.quota;
     const amountToSend = this.web3.utils.toWei(bet.quantity, "ether");
-    this.fatherContract.methods
+    await this.fatherContract.methods
       .createBet(bet.match.id, bet.result, bet.quantity, minimumCounterBet)
-      .send({ from: account, value: amountToSend });
-
-    this.fatherContract.events
-      .Status([])
-      .on("connected", function (subscriptionId) {
-        console.log("New subscription with ID: " + subscriptionId);
-      })
-      .on("data", function (event) {
-        console.log("New event:");
-        console.log(event);
-        alert("New bet 🤑 💰 💸");
+      .estimateGas({ from: account })
+      .then(async (gasAmount) => {
+        await this.fatherContract.methods
+          .createBet(bet.match.id, bet.result, bet.quantity, minimumCounterBet)
+          .send({ from: account, value: amountToSend, gas: gasAmount });
       });
+
+    // this.fatherContract.events
+    //   .Status([])
+    //   .on("connected", function (subscriptionId) {
+    //     console.log("New subscription with ID: " + subscriptionId);
+    //   })
+    //   .on("data", function (event) {
+    //     console.log("New event:");
+    //     console.log(event);
+    //     alert("New bet 🤑 💰 💸");
+    //   });
   };
 
   getBetsByAccount = async (account) => {
-    return await this.fatherContract.methods.getAllBetsByUser(account).call();
+    return this.fatherContract.methods.getAllBetsByUser(account).call();
   };
 
   getCurrentMatches() {}

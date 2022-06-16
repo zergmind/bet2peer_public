@@ -109,10 +109,12 @@ class App extends Component {
     this.setState({ showPopupCreateBet: false });
   };
 
-  createBet = (bet) => {
-    debugger;
+  createBet = async (bet) => {
     const { bet2peerService, account } = this.state;
-    bet2peerService.createBet(bet, account);
+    await bet2peerService.createBet(bet, account);
+    bet2peerService.getBetsByAccount(account).then((contracts) => {
+      //CONTINUAR AQUÍ
+    });
     this.setState({ showPopupCreateBet: false });
   };
 
@@ -126,8 +128,11 @@ class App extends Component {
     this.setState({ showPopupAcceptBet: false });
   };
 
-  acceptBet = (bet) => {
-    // const { bet2peerService } = this.state;
+  acceptBet = async (bet) => {
+    const { bet2peerService, account } = this.state;
+    await bet2peerService.createBet(bet, account);
+
+    bet2peerService.getBetsByAccount(account);
     this.setState({ showPopupAcceptBet: false });
   };
 
@@ -135,6 +140,7 @@ class App extends Component {
     const { bet2peerService } = this.state;
     matches.forEach((match) => {
       bet2peerService.getBetsForMatch(match.id).then((bets) => {
+        bets.forEach((bet) => (bet.match = match));
         match.bets = bets;
         this.setState({ matches });
       });

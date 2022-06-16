@@ -3,12 +3,14 @@
     "contractAddress": "contract1",
     "originalBet": 50,
     "minimumOppositeBet": 25,
-    "matchId": 18165994
+    "matchId": 18165994,
+    "result": 1
   },
   {
     "contractAddress": "contract2",
     "originalBet": 30,
     "minimumOppositeBet": 20,
-    "matchId": 18165994
+    "matchId": 18165994,
+    "result": 0
   }
 ]
