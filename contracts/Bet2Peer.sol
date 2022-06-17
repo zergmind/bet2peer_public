@@ -23,6 +23,13 @@ contract Bet2Peer is Ownable {
         localWin,
         visitorWin
     }
+    struct contractInfo {
+        address originalOwner;
+        uint256 currentMatch;
+        uint8 result;
+        uint256 origibalBet;
+        uint256 minimumCounterBet;
+    }
     uint256 public currentMatch;
     address payable originalOwner;
     address payable counterGambler;
@@ -77,13 +84,20 @@ contract Bet2Peer is Ownable {
     _fatherAddress: dirección del contrato padre
      */
     constructor(address _originalGambler, uint256 _matchId, uint8 _result, uint256 _originalBet, uint256 _minimumCounterBet, address _fatherAddress) {
-        originalOwner = payable(_originalGambler);
-        currentMatch = _matchId;
-        result = _result;
-        origibalBet = _originalBet;
-        minimumCounterBet = _minimumCounterBet;
+        originalOwner = payable(_originalGambler); //
+        currentMatch = _matchId; //
+        result = _result; //
+        origibalBet = _originalBet; //
+        minimumCounterBet = _minimumCounterBet; //
         fatherAddress = _fatherAddress;
         activeBet = true;
+        //Relleno el struct con toda la info del contrato
+        contractInfo.originalOwner = _originalGambler;
+        contractInfo.currentMatch = _matchId;
+        contractInfo.result = _result;
+        contractInfo.origibalBet = _originalBet;
+        contractInfo.minimumCounterBet = _minimumCounterBet;
+        
         // Se emite un Evento
         emit Status(string(abi.encodePacked("Partido ", _matchId, " creado")));
     }
@@ -149,6 +163,13 @@ contract Bet2Peer is Ownable {
      */
     function getContractAddress() onlyOwner public view returns (address)  {
         return address(this);
+    }
+
+    /**
+    Función que devuelve información del contrato
+     */
+    function getContractInfo() public view returns(struct){
+        return contractInfo;
     }
 
     /**

@@ -1,10 +1,9 @@
 import PropTypes from "prop-types";
-import { propTypes } from "react-bootstrap/esm/Image";
 
 class Bet {}
 
 Bet.propTypes = {
-  contractAddress: propTypes.string,
+  contractAddress: PropTypes.string,
   match: PropTypes.any,
   result: PropTypes.number,
   quantity: PropTypes.number,

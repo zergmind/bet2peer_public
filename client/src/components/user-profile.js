@@ -3,11 +3,14 @@ import React, { Component } from "react";
 export class UserProfile extends Component {
   componentDidUpdate() {
     const { bet2peerService } = this.props;
-    this.props.userBets.forEach((userBet) => {
-      //Si no se han traído datos de la apuesta
-      if (!userBet.result) {
-      }
-    });
+    if(this.props.userBets){
+      debugger
+      this.props.userBets.forEach((userBet) => {
+        //Si no se han traído datos de la apuesta
+        if (!userBet.result) {
+        }
+      });
+    }
   }
 
   render() {
@@ -32,7 +35,7 @@ export class UserProfile extends Component {
           <div></div>
         </div>
         ) : (<div>Para ver tus apuestas conéctate a tu wallet</div>
-        )}
+        )
       </div>
     );
   }
