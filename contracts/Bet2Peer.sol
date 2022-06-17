@@ -168,7 +168,7 @@ contract Bet2Peer is Ownable {
     /**
     Función que devuelve información del contrato
      */
-    function getContractInfo() public view returns(struct){
+    function getContractInfo() public view returns(contractInfo memory){
         return contractInfo;
     }
 

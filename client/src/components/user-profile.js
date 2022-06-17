@@ -34,12 +34,7 @@ export class UserProfile extends Component {
 
           <div></div>
         </div>
-<<<<<<< HEAD
-        ) : (<div>Para ver tus apuestas conéctate a tu wallet</div>
-        )
-=======
         ) : (<div>Para ver tus apuestas conéctate a tu wallet</div>)
->>>>>>> 6cb77ee8051df51d15cd895390e0609a8ae0f072
       </div>
     );
   }
