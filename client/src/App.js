@@ -8,7 +8,7 @@ import { UserProfile } from "./components/user-profile";
 import { Web3Service } from "./services/web3-service.js";
 import { SportMonksService } from "./services/sportmonks-service.js";
 import { WebsocketService } from "./services/websocket-service.js";
-import { Bet2PeerService } from "./services/bet2peer-service.js";
+import { FatherContractService } from "./services/father-contract-service.js";
 
 import "./App.css";
 // import { PopupCreateBet } from "./components/popup-create-bet.js";
@@ -20,7 +20,7 @@ class App extends Component {
   state = {
     storageValue: 0,
     web3Service: null,
-    bet2peerService: null,
+    fatherContractService: null,
     accounts: null,
     contract: null,
     websocketService: null,
@@ -39,7 +39,7 @@ class App extends Component {
     try {
       // Get network provider and web3 instance.
 
-      await this.loadWeb3AndBet2PeerService();
+      await this.loadWeb3AndFatherContractService();
       const websocketService = new WebsocketService();
       websocketService.setReceiveMessage(this.receiveMessage);
 
@@ -57,7 +57,7 @@ class App extends Component {
     }
   };
 
-  loadWeb3AndBet2PeerService = async () => {
+  loadWeb3AndFatherContractService = async () => {
     try {
       const web3Service = new Web3Service();
       await web3Service.getWeb3();
@@ -66,22 +66,26 @@ class App extends Component {
       const networkId = await web3Service.getNetworkId();
       const networkType = await web3Service.getNetworkType();
 
-      const bet2peerService = new Bet2PeerService();
-      await bet2peerService.configureService(web3Service);
-      const userBets = await bet2peerService.getBetsByAccount(account);
-      debugger;
+      const fatherContractService = new FatherContractService();
+      await fatherContractService.configureService(web3Service);
+      const userBets = await fatherContractService.getBetsByAccount(account);
+
+      // await fatherContractService.getSonContractMatchId(
+      //   userBets[0].contractAddress,
+      //   account
+      // );
       this.setState({
         accounts,
         account,
         networkId,
         networkType,
-        bet2peerService,
+        fatherContractService,
         userBets,
       });
     } catch (error) {}
   };
 
-  loadBet2PeerService = () => {};
+  loadFatherContractService = () => {};
 
   sendMessage = async (nickname, currentMessage) => {
     const { websocketService, messages } = this.state;
@@ -112,9 +116,9 @@ class App extends Component {
   };
 
   createBet = async (bet) => {
-    const { bet2peerService, account } = this.state;
-    await bet2peerService.createBet(bet, account);
-    const userBets = bet2peerService.getBetsByAccount(account);
+    const { fatherContractService, account } = this.state;
+    await fatherContractService.createBet(bet, account);
+    const userBets = await fatherContractService.getBetsByAccount(account);
     this.setState({ showPopupCreateBet: false, userBets });
   };
 
@@ -129,17 +133,17 @@ class App extends Component {
   };
 
   acceptBet = async (bet) => {
-    const { bet2peerService, account } = this.state;
-    await bet2peerService.createBet(bet, account);
+    const { fatherContractService, account } = this.state;
+    await fatherContractService.createBet(bet, account);
 
-    bet2peerService.getBetsByAccount(account);
-    this.setState({ showPopupAcceptBet: false });
+    const userBets = await fatherContractService.getBetsByAccount(account);
+    this.setState({ showPopupAcceptBet: false, userBets });
   };
 
   getBetsByMatches(matches) {
-    const { bet2peerService } = this.state;
+    const { fatherContractService } = this.state;
     matches.forEach((match) => {
-      bet2peerService.getBetsForMatch(match.id).then((bets) => {
+      fatherContractService.getBetsForMatch(match.id).then((bets) => {
         bets.forEach((bet) => (bet.match = match));
         match.bets = bets;
         this.setState({ matches });
@@ -208,7 +212,7 @@ class App extends Component {
             account={this.state.accounts ? this.state.accounts[0] : null}
             messages={this.state.messages}
             userBets={this.state.userBets}
-            bet2peerService={this.state.bet2peerService}
+            fatherContractService={this.state.fatherContractService}
             sendMessageFunction={this.sendMessage}
           ></UserProfileAndChat>
         </div>

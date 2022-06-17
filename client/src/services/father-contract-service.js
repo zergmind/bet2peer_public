@@ -1,13 +1,13 @@
 // import PropTypes from "prop-types";
 // import Bet from "../models/bet";
 // import * as Bet2PeerJSON from "../contracts/Bet2Peer.json";
-import * as FatherJSON from "../contracts/Father.json";
+import * as FatherContractJSON from "../contracts/Father.json";
 import Bet from "../models/bet";
 
-export class Bet2PeerService {
-  fatherContractABI = FatherJSON.abi;
-  fatherContractAddress = "0x744e7aAE80daF5978EC3d0c9eD516b9bF7fD928e";
-  // fatherContractAddress = "0x9F20186c3ffAAFC531A2331E9D739221ca21b62d"; //Contrato de Chus en Ganache
+export class FatherContractService {
+  fatherContractABI = FatherContractJSON.abi;
+  // fatherContractAddress = "0x744e7aAE80daF5978EC3d0c9eD516b9bF7fD928e";
+  fatherContractAddress = "0x9F20186c3ffAAFC531A2331E9D739221ca21b62d"; //Contrato de Chus en Ganache
   web3;
   fatherContract;
 
@@ -64,9 +64,6 @@ export class Bet2PeerService {
       );
   };
 
-  getBetData = async () => {};
-
-  getCurrentMatches() {}
   //18165994, 18165993, 18166002, 18165998, 18166001, 18165997
   getBetsForMatch(matchId) {
     return fetch(
@@ -74,8 +71,4 @@ export class Bet2PeerService {
       this.requestOptions
     ).then((response) => response.json());
   }
-
-  createBetInContract = () => {};
-
-  acceptBetInContract = () => {};
 }
