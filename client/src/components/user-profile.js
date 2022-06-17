@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 export class UserProfile extends Component {
   componentDidUpdate() {
-    const { bet2peerService } = this.props;
+    const { fatherContractService } = this.props;
     this.props.userBets.forEach((userBet) => {
       //Si no se han traído datos de la apuesta
       if (!userBet.result) {
@@ -31,8 +31,7 @@ export class UserProfile extends Component {
 
           <div></div>
         </div>
-        ) : (<div>Para ver tus apuestas conéctate a tu wallet</div>
-        )}
+        ) : (<div>Para ver tus apuestas conéctate a tu wallet</div>)
       </div>
     );
   }
