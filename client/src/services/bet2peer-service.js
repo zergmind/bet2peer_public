@@ -2,14 +2,14 @@
 // import Bet from "../models/bet";
 // import * as Bet2PeerJSON from "../contracts/Bet2Peer.json";
 import * as FatherJSON from "../contracts/Father.json";
+import Bet from "../models/bet";
 
 export class Bet2PeerService {
   fatherContractABI = FatherJSON.abi;
   // fatherContractAddress = "0xaFAd47eaE4bc9F55Ca6B06Aef8e9105e183CBe7a";
-  fatherContractAddress = "0x2589Ed6b23c390d3F2cEb215C64feFbaB4342591";
+  fatherContractAddress = "0x9F20186c3ffAAFC531A2331E9D739221ca21b62d"; //Contrato de Chus en Ganache
   web3;
   fatherContract;
-  // constructor() {}
 
   configureService = async (web3Service) => {
     this.web3 = await web3Service.getWeb3();
@@ -47,8 +47,24 @@ export class Bet2PeerService {
   };
 
   getBetsByAccount = async (account) => {
-    return this.fatherContract.methods.getAllBetsByUser(account).call();
+    return await this.fatherContract.methods
+      .getAllBetsByUser(account)
+      .call({ from: account })
+      .then(
+        (contractsAddresses) => {
+          return contractsAddresses.map((contractAddress) => {
+            let bet = new Bet();
+            bet.contractAddress = contractAddress;
+            return bet;
+          });
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
   };
+
+  getBetData = async () => {};
 
   getCurrentMatches() {}
   //18165994, 18165993, 18166002, 18165998, 18166001, 18165997

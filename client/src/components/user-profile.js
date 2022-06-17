@@ -1,28 +1,37 @@
 import React, { Component } from "react";
 
 export class UserProfile extends Component {
+  componentDidUpdate() {
+    const { bet2peerService } = this.props;
+    this.props.userBets.forEach((userBet) => {
+      //Si no se han traído datos de la apuesta
+      if (!userBet.result) {
+      }
+    });
+  }
+
   render() {
     return (
       <div className="user-profile">
         <div>Mi perfil</div>
-        {this.props.account ? (
-          <div>
-            <div className="avatar-and-network">
-              <div>
-                <img src="/img/avatar.webp" alt="perfil de usuario"></img>
-              </div>
-              <div>
-                Red {this.props.networkType}({this.props.networkId})
-              </div>
+        {/* {this.props.account ? ( */}
+        <div>
+          <div className="avatar-and-network">
+            <div>
+              <img src="/img/avatar.webp" alt="perfil de usuario"></img>
             </div>
-            <div className="user-account">
-              <div>{this.props.account}</div>
+            <div>
+              Red {this.props.networkType}({this.props.networkId})
             </div>
-            <div>Mis apuestas</div>
-            <div></div>
           </div>
-        ) : (
-          <div>Para ver tus apuestas conéctate a tu wallet</div>
+          <div className="user-account">
+            <div>{this.props.account}</div>
+          </div>
+          <div>Mis apuestas</div>
+
+          <div></div>
+        </div>
+        ) : (<div>Para ver tus apuestas conéctate a tu wallet</div>
         )}
       </div>
     );

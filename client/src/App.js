@@ -32,6 +32,7 @@ class App extends Component {
     selectedMatchId: null,
     showPopupCreateBet: false,
     showPopupAcceptBet: false,
+    userBets: [],
   };
 
   componentDidMount = async () => {
@@ -67,14 +68,15 @@ class App extends Component {
 
       const bet2peerService = new Bet2PeerService();
       await bet2peerService.configureService(web3Service);
-      // const userBets = await bet2peerService.getBetsByAccount(accounts[0]);
-
+      const userBets = await bet2peerService.getBetsByAccount(account);
+      debugger;
       this.setState({
         accounts,
         account,
         networkId,
         networkType,
         bet2peerService,
+        userBets,
       });
     } catch (error) {}
   };
@@ -112,10 +114,8 @@ class App extends Component {
   createBet = async (bet) => {
     const { bet2peerService, account } = this.state;
     await bet2peerService.createBet(bet, account);
-    bet2peerService.getBetsByAccount(account).then((contracts) => {
-      //CONTINUAR AQUÍ
-    });
-    this.setState({ showPopupCreateBet: false });
+    const userBets = bet2peerService.getBetsByAccount(account);
+    this.setState({ showPopupCreateBet: false, userBets });
   };
 
   showPopupAcceptBet = (bet) => {
@@ -207,6 +207,8 @@ class App extends Component {
             networkType={this.state.networkType}
             account={this.state.accounts ? this.state.accounts[0] : null}
             messages={this.state.messages}
+            userBets={this.state.userBets}
+            bet2peerService={this.state.bet2peerService}
             sendMessageFunction={this.sendMessage}
           ></UserProfileAndChat>
         </div>

@@ -11,6 +11,8 @@ export class UserProfileAndChat extends Component {
           networkId={this.props.networkId}
           account={this.props.account}
           networkType={this.props.networkType}
+          userBets={this.props.userBets}
+          bet2peerService={this.props.bet2peerService}
         ></UserProfile>
         <Chat messages={this.props.messages}></Chat>
         <ChatForm
