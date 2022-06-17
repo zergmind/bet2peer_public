@@ -3,8 +3,8 @@ import React, { Component } from "react";
 export class UserProfile extends Component {
   componentDidUpdate() {
     const { fatherContractService } = this.props;
-    if(this.props.userBets){
-      debugger
+    if (this.props.userBets) {
+      debugger;
       this.props.userBets.forEach((userBet) => {
         //Si no se han traído datos de la apuesta
         if (!userBet.result) {
