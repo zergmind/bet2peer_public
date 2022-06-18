@@ -7,7 +7,7 @@ import Bet from "../models/bet";
 export class FatherContractService {
   fatherContractABI = FatherContractJSON.abi;
   // fatherContractAddress = "0x744e7aAE80daF5978EC3d0c9eD516b9bF7fD928e";
-  fatherContractAddress = "0x9F20186c3ffAAFC531A2331E9D739221ca21b62d"; //Contrato de Chus en Ganache
+  fatherContractAddress = "0x496287eFd724577124533F7df1069E431d234A9d"; //Contrato de Chus en Ganache
   web3;
   fatherContract;
 

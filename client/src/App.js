@@ -9,6 +9,7 @@ import { Web3Service } from "./services/web3-service.js";
 import { SportMonksService } from "./services/sportmonks-service.js";
 import { WebsocketService } from "./services/websocket-service.js";
 import { FatherContractService } from "./services/father-contract-service.js";
+import { SonContractService } from "./services/son-contract-service.js";
 
 import "./App.css";
 // import { PopupCreateBet } from "./components/popup-create-bet.js";
@@ -21,9 +22,11 @@ class App extends Component {
     storageValue: 0,
     web3Service: null,
     fatherContractService: null,
+    sonContractService: null,
     accounts: null,
     contract: null,
     websocketService: null,
+    sportMonksService: null,
     matches: null,
     messages: [],
     showChat: false,
@@ -39,25 +42,28 @@ class App extends Component {
     try {
       // Get network provider and web3 instance.
 
-      await this.loadWeb3AndFatherContractService();
+      await this.loadServices();
       const websocketService = new WebsocketService();
       websocketService.setReceiveMessage(this.receiveMessage);
 
       const sportMonksService = new SportMonksService();
-      sportMonksService.getCurrentMatches().then((data) => {
+      await sportMonksService.getCurrentMatches().then((data) => {
         this.getBetsByMatches(data);
         this.setState({ matches: data });
       });
 
       this.setState({
         websocketService,
+        sportMonksService,
       });
+
+      await this.loadUserBetsWithData();
     } catch (error) {
       // Catch any errors for any of the above operations.
     }
   };
 
-  loadWeb3AndFatherContractService = async () => {
+  loadServices = async () => {
     try {
       const web3Service = new Web3Service();
       await web3Service.getWeb3();
@@ -68,7 +74,9 @@ class App extends Component {
 
       const fatherContractService = new FatherContractService();
       await fatherContractService.configureService(web3Service);
-      const userBets = await fatherContractService.getBetsByAccount(account);
+
+      const sonContractService = new SonContractService();
+      await sonContractService.configureService(web3Service, account);
 
       // await fatherContractService.getSonContractMatchId(
       //   userBets[0].contractAddress,
@@ -80,12 +88,10 @@ class App extends Component {
         networkId,
         networkType,
         fatherContractService,
-        userBets,
+        sonContractService,
       });
     } catch (error) {}
   };
-
-  loadFatherContractService = () => {};
 
   sendMessage = async (nickname, currentMessage) => {
     const { websocketService, messages } = this.state;
@@ -107,6 +113,23 @@ class App extends Component {
     this.setState({ messages });
   };
 
+  loadUserBetsWithData = async () => {
+    const { matches } = this.state;
+    const { fatherContractService, account, sonContractService } = this.state;
+    const userBets = await fatherContractService.getBetsByAccount(account);
+
+    let userBetsWithAllData = [];
+    for (let i = 0; i < userBets.length; i++) {
+      let newBet = await sonContractService.getAllData(
+        userBets[i].contractAddress,
+        matches
+      );
+      userBetsWithAllData.push(newBet);
+    }
+
+    this.setState({ userBets: userBetsWithAllData });
+  };
+
   showPopupCreateBet = (match) => {
     this.setState({ selectedMatch: match, showPopupCreateBet: true });
   };
@@ -118,8 +141,9 @@ class App extends Component {
   createBet = async (bet) => {
     const { fatherContractService, account } = this.state;
     await fatherContractService.createBet(bet, account);
-    const userBets = await fatherContractService.getBetsByAccount(account);
-    this.setState({ showPopupCreateBet: false, userBets });
+
+    await this.loadUserBetsWithData();
+    this.setState({ showPopupCreateBet: false });
   };
 
   showPopupAcceptBet = (bet) => {
@@ -136,8 +160,8 @@ class App extends Component {
     const { fatherContractService, account } = this.state;
     await fatherContractService.createBet(bet, account);
 
-    const userBets = await fatherContractService.getBetsByAccount(account);
-    this.setState({ showPopupAcceptBet: false, userBets });
+    await this.loadUserBetsWithData();
+    this.setState({ showPopupAcceptBet: false });
   };
 
   getBetsByMatches(matches) {
@@ -195,6 +219,7 @@ class App extends Component {
               networkId={this.props.networkId}
               account={this.props.account}
               networkType={this.props.networkType}
+              sonContractService={this.state.sonContractService}
             ></UserProfile>
           ) : null}
           {this.props.showChat ? (
@@ -212,8 +237,8 @@ class App extends Component {
             account={this.state.accounts ? this.state.accounts[0] : null}
             messages={this.state.messages}
             userBets={this.state.userBets}
-            fatherContractService={this.state.fatherContractService}
             sendMessageFunction={this.sendMessage}
+            sonContractService={this.state.sonContractService}
           ></UserProfileAndChat>
         </div>
         {this.state.showPopupCreateBet ? (

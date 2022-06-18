@@ -12,7 +12,7 @@ export class UserProfileAndChat extends Component {
           account={this.props.account}
           networkType={this.props.networkType}
           userBets={this.props.userBets}
-          fatherContractService={this.props.fatherContractService}
+          sonContractService={this.props.sonContractService}
         ></UserProfile>
         <Chat messages={this.props.messages}></Chat>
         <ChatForm

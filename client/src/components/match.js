@@ -35,7 +35,10 @@ export class Match extends Component {
             <div className="team-name">{this.props.match.localName}</div>
             <img src={this.props.match.localImageUrl} alt="equipo_local" />
           </div>
-          <div className="vs">vs</div>
+          {/* <div className="vs">vs</div> */}
+          <div className="vs">
+            <img className="vs-image" src="/img/vs.png" alt="vs" />
+          </div>
           <div className="team-visitor">
             <img
               src={this.props.match.visitorImageUrl}
