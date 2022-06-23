@@ -2,10 +2,10 @@ import React, { Component } from "react";
 
 export class BetList extends Component {
   getQuota = (bet) => {
-    const ratio = bet.minimumOppositeBet / bet.originalBet;
-    const ratioPlusOwnBet = ratio + 1;
+    // const ratio = bet.minimumOppositeBet / bet.originalBet;
+    // const ratioPlusOwnBet = ratio + 1;
 
-    return ratioPlusOwnBet.toFixed(2);
+    return bet.quota.toFixed(2);
   };
 
   getTypeOfBetResult = (bet) => {
@@ -36,7 +36,7 @@ export class BetList extends Component {
               </div>
               <div className="bet-quotas-container">
                 <div className="bet-opposite">
-                  {bet.minimumOppositeBet} ETH
+                  {bet.minimumCounterBet} ETH
                   <img
                     className="bet-logo"
                     src="/img/eth.png"

@@ -16,6 +16,7 @@ import "./App.css";
 import { UserProfileAndChat } from "./components/user-profile-and-chat.js";
 import { PopupCreateBet } from "./components/popup-create-bet";
 import { PopupAcceptBet } from "./components/popup-accept-bet";
+import { PopupLoading } from "./components/popup-loading";
 
 class App extends Component {
   state = {
@@ -35,6 +36,7 @@ class App extends Component {
     selectedMatchId: null,
     showPopupCreateBet: false,
     showPopupAcceptBet: false,
+    showPopupLoading: false,
     userBets: [],
   };
 
@@ -48,8 +50,9 @@ class App extends Component {
 
       const sportMonksService = new SportMonksService();
       await sportMonksService.getCurrentMatches().then((data) => {
-        this.getBetsByMatches(data);
+        // this.getBetsByMatches(data);
         this.setState({ matches: data });
+        this.loadMatchBetsWithData(data);
       });
 
       this.setState({
@@ -71,6 +74,10 @@ class App extends Component {
       const account = accounts[0];
       const networkId = await web3Service.getNetworkId();
       const networkType = await web3Service.getNetworkType();
+      //Evento cuando cambian las cuentas
+      window.ethereum.on("accountsChanged", function (accounts) {
+        window.location.reload();
+      });
 
       const fatherContractService = new FatherContractService();
       await fatherContractService.configureService(web3Service);
@@ -130,6 +137,35 @@ class App extends Component {
     this.setState({ userBets: userBetsWithAllData });
   };
 
+  loadMatchBetsWithData = async (matches) => {
+    const { fatherContractService, account, sonContractService } = this.state;
+
+    for (let i = 0; i < matches.length; i++) {
+      var match = matches[i];
+      match.bets = [];
+      await fatherContractService
+        .getBetsByMatchId(account, match.id)
+        .then(async (bets) => {
+          for (let j = 0; j < bets.length; j++) {
+            let newBet = await sonContractService.getAllData(
+              bets[j].contractAddress,
+              matches
+            );
+            newBet.match = match;
+
+            if (
+              !newBet.isTheUserTheOwner &&
+              !newBet.isTheUserTheCounterGambler
+            ) {
+              match.bets.push(newBet);
+            }
+          }
+        });
+    }
+
+    this.setState({ matches });
+  };
+
   showPopupCreateBet = (match) => {
     this.setState({ selectedMatch: match, showPopupCreateBet: true });
   };
@@ -140,15 +176,17 @@ class App extends Component {
 
   createBet = async (bet) => {
     const { fatherContractService, account } = this.state;
-    await fatherContractService.createBet(bet, account);
 
+    this.setState({ showPopupCreateBet: false, showPopupLoading: true });
+    await fatherContractService.createBet(bet, account, this.createBetFinished);
+  };
+
+  createBetFinished = async (arg) => {
     await this.loadUserBetsWithData();
-    this.setState({ showPopupCreateBet: false });
+    this.closePopupLoading();
   };
 
   showPopupAcceptBet = (bet) => {
-    const { matches } = this.state;
-    bet.match = matches.find((match) => match.id === bet.matchId);
     this.setState({ selectedBet: bet, showPopupAcceptBet: true });
   };
 
@@ -156,12 +194,20 @@ class App extends Component {
     this.setState({ showPopupAcceptBet: false });
   };
 
-  acceptBet = async (bet) => {
-    const { fatherContractService, account } = this.state;
-    await fatherContractService.createBet(bet, account);
+  closePopupLoading = () => {
+    this.setState({ showPopupLoading: false });
+  };
 
+  acceptBet = async (bet) => {
+    const { sonContractService, account } = this.state;
+    await sonContractService.acceptBet(bet, account, this.acceptBetFinished);
+
+    this.setState({ showPopupAcceptBet: false, showPopupLoading: true });
+  };
+
+  acceptBetFinished = async (arg) => {
     await this.loadUserBetsWithData();
-    this.setState({ showPopupAcceptBet: false });
+    this.closePopupLoading();
   };
 
   getBetsByMatches(matches) {
@@ -176,18 +222,18 @@ class App extends Component {
   }
 
   burgerMenuChange = (changeTo) => {
-    let showChat = true;
-    let showUser = true;
-    let showBets = true;
+    let showChat = false;
+    let showUser = false;
+    let showBets = false;
     switch (changeTo) {
       case "chat":
-        showChat = false;
+        showChat = true;
         break;
       case "user":
-        showUser = false;
+        showUser = true;
         break;
       case "bets":
-        showBets = false;
+        showBets = true;
         break;
       default:
         break;
@@ -214,7 +260,7 @@ class App extends Component {
               showPopupAcceptBetFunction={this.showPopupAcceptBet}
             ></MatchList>
           ) : null}
-          {this.props.showUser ? (
+          {this.state.showUser ? (
             <UserProfile
               networkId={this.props.networkId}
               account={this.props.account}
@@ -222,10 +268,10 @@ class App extends Component {
               sonContractService={this.state.sonContractService}
             ></UserProfile>
           ) : null}
-          {this.props.showChat ? (
+          {this.state.showChat ? (
             <Chat messages={this.state.messages}></Chat>
           ) : null}
-          {this.props.showChat ? (
+          {!this.props.showChat ? (
             <ChatForm sendMessageFunction={this.sendMessage}></ChatForm>
           ) : null}
         </div>
@@ -254,6 +300,11 @@ class App extends Component {
             acceptBetFunction={this.acceptBet}
             closePopupAcceptBetFunction={this.closePopupAcceptBet}
           ></PopupAcceptBet>
+        ) : null}
+        {this.state.showPopupLoading ? (
+          <PopupLoading
+            closePopupLoadingFunction={this.closePopupLoading}
+          ></PopupLoading>
         ) : null}
       </div>
     );

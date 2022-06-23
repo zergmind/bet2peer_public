@@ -6,7 +6,7 @@
 // SPDX-License-Identifier: UNLICENSED
 
 pragma solidity 0.8.14;
-
+import "./Father.sol";
 import "../client/node_modules/@openzeppelin/contracts/access/Ownable.sol";
 
 
@@ -25,6 +25,7 @@ contract Bet2Peer is Ownable {
     }
     struct contractInformation {
         address originalOwner;
+        address counterGambler;
         uint256 currentMatch;
         uint8 result;
         uint256 origibalBet;
@@ -38,6 +39,7 @@ contract Bet2Peer is Ownable {
     uint256 origibalBet;
     uint256 minimumCounterBet;
     address fatherAddress;
+    Father fatherContract;
 
     bool activeBet;
     bool isAccepted;
@@ -92,6 +94,7 @@ contract Bet2Peer is Ownable {
         minimumCounterBet = _minimumCounterBet; //
         fatherAddress = _fatherAddress;
         activeBet = true;
+        isAccepted = false;
         //Relleno el struct con toda la info del contrato
         contractInfo[address(this)].originalOwner = _originalGambler;
         contractInfo[address(this)].currentMatch = _matchId;
@@ -111,8 +114,14 @@ contract Bet2Peer is Ownable {
         contractActive
     {
         require(msg.value >= minimumCounterBet, "Apuesta insuficiente");
+        require(isAccepted == false, "Apuesta ya aceptada");
         counterGambler = payable(msg.sender);
         counterGambler.transfer(msg.value);
+        contractInfo[address(this)].counterGambler = counterGambler;
+        isAccepted = true;
+        
+        fatherContract = Father(address(fatherAddress));
+        fatherContract.addBetToCounterGambler(counterGambler, address(this));
 
         emit Status(string(abi.encodePacked(counterGambler, " ha aceptado la apuesta de ", originalOwner)));
     }

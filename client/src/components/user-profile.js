@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { SonContractService } from "../services/son-contract-service";
 
 export class UserProfile extends Component {
   getTypeOfBetResult = (bet) => {
@@ -36,33 +35,44 @@ export class UserProfile extends Component {
             <div className="user-bets">
               {this.props.userBets ? (
                 this.props.userBets.map((bet) => (
-                  <div className="user-bet" key={bet.contractAddress}>
-                    <div className="bet-teams">
-                      <div>
-                        <img src={bet.match.localImageUrl} alt="equipo_local" />
+                  <div key={bet.contractAddress}>
+                    {bet.match ? (
+                      <div className="user-bet">
+                        <div className="bet-teams">
+                          <div>
+                            <img
+                              src={bet.match.localImageUrl}
+                              alt="equipo_local"
+                            />
+                          </div>
+                          <div>
+                            <img
+                              className="vs-image"
+                              src="/img/vs.png"
+                              alt="vs"
+                            />
+                          </div>
+                          <div>
+                            <img
+                              src={bet.match.visitorImageUrl}
+                              alt="equipo_visitante"
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <div className="bet-quantity">
+                            {bet.quantity}
+                            <img
+                              className="bet-logo"
+                              src="/img/eth.png"
+                              alt="logo ethereum"
+                            ></img>
+                            a cuota {bet.quota}
+                          </div>
+                          <div>{this.getTypeOfBetResult(bet)}</div>
+                        </div>
                       </div>
-                      <div>
-                        <img className="vs-image" src="/img/vs.png" alt="vs" />
-                      </div>
-                      <div>
-                        <img
-                          src={bet.match.visitorImageUrl}
-                          alt="equipo_visitante"
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <div className="bet-quantity">
-                        {bet.quantity}
-                        <img
-                          className="bet-logo"
-                          src="/img/eth.png"
-                          alt="logo ethereum"
-                        ></img>
-                        a cuota {bet.quota}
-                      </div>
-                      <div>{this.getTypeOfBetResult(bet)}</div>
-                    </div>
+                    ) : null}
                   </div>
                 ))
               ) : (

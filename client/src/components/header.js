@@ -9,7 +9,7 @@ export class Header extends Component {
           alt="logo con letras"
         ></img>
         <div className="burger-menu">
-          {this.props.showChat ? (
+          {!this.props.showChat ? (
             <img
               src="/img/chat_icon3.png"
               alt="mostrar chat"
@@ -18,7 +18,7 @@ export class Header extends Component {
               }}
             />
           ) : null}
-          {this.props.showUser ? (
+          {!this.props.showUser ? (
             <img
               src="/img/avatar.webp"
               alt="mostrar usuario"
@@ -27,7 +27,7 @@ export class Header extends Component {
               }}
             />
           ) : null}
-          {this.props.showBets ? (
+          {!this.props.showBets ? (
             <img
               src="/img/logos/png/flat/imago-tipo-color.png"
               alt="mostrar apuestas"

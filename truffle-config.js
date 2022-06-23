@@ -1,3 +1,6 @@
+const HDWalletProvider = require("@truffle/hdwallet-provider");
+const developmentMnemonic =
+  "cabbage ordinary spare plastic language stone suggest speed duck twelve bamboo helmet";
 const path = require("path");
 
 module.exports = {
@@ -14,6 +17,17 @@ module.exports = {
       host: "127.0.0.1",
       port: 7545,
       network_id: "*",
+    },
+    mumbai: {
+      provider: () =>
+        new HDWalletProvider(
+          developmentMnemonic,
+          `https://rpc-mumbai.maticvigil.com`
+        ),
+      network_id: 80001,
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true,
     },
   },
   compilers: {

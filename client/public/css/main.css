@@ -76,6 +76,8 @@ li{
 .header .burger-menu img
 {
     cursor: pointer;
+    max-width: 2.5rem;
+    max-height: 2.5rem;
 }
 .user-profile-and-chat
 {

@@ -29,6 +29,32 @@ export class SonContractService {
       );
   };
 
+  acceptBet = async (bet, account, callback) => {
+    console.log(account);
+    const sonContract = await new this.web3.eth.Contract(
+      this.sonContractABI,
+      bet.contractAddress
+    );
+
+    const amountToSend = this.web3.utils.toWei(
+      bet.minimumCounterBet.toString(),
+      "ether"
+    );
+    const gasAmount = await sonContract.methods
+      .acceptBet()
+      .estimateGas({ from: account, value: amountToSend })
+      .then((gasAmount) => gasAmount);
+
+    return await sonContract.methods.acceptBet().send(
+      {
+        from: account,
+        value: amountToSend,
+        gas: gasAmount,
+      },
+      callback
+    );
+  };
+
   getAllData = async (contractAddress, matches) => {
     const sonContract = await new this.web3.eth.Contract(
       this.sonContractABI,
@@ -42,21 +68,27 @@ export class SonContractService {
           let bet = new Bet();
           bet.contractAddress = contractAddress;
           bet.originalOwner = data[0];
-          bet.matchId = data[1];
-          bet.result = parseInt(data[2]);
-          bet.isTheUserTheOwner = this.userAccount == data.originalOwner;
-          const minimumCounterBet = parseFloat(data[4]);
+          bet.counterGambler = data[1];
+          bet.matchId = data[2];
+          bet.result = parseInt(data[3]);
+          bet.isTheUserTheOwner = this.userAccount === data.originalOwner;
+          bet.minimumCounterBet = parseFloat(data[5]);
+          bet.isTheUserTheCounterGambler =
+            this.userAccount === bet.counterGambler;
+          bet.quantity = parseFloat(data[4]);
 
           if (bet.isTheUserTheOwner) {
-            bet.quantity = parseFloat(data[3]);
             bet.quota =
-              parseFloat(minimumCounterBet) / parseFloat(bet.quantity);
+              parseFloat(bet.minimumCounterBet) / parseFloat(bet.quantity);
           } else {
-            bet.quantity = data[3];
-            bet.quota = bet.quantity / minimumCounterBet;
-            bet.quota++; //Esto se pone porque hay que añadir 1 para incluir lo que estás apostando
+            bet.minimumCounterBet = bet.minimumCounterBet - bet.quantity;
+            bet.quota = bet.quantity / bet.minimumCounterBet;
+            bet.quota++;
           }
-          const match = matches.find((match) => match.id == bet.matchId);
+
+          const match = matches.find(
+            (match) => parseInt(match.id) === parseInt(bet.matchId)
+          );
           bet.match = match;
 
           return bet;

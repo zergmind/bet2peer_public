@@ -4,14 +4,13 @@ import Popup from "./popup.js";
 
 export class PopupAcceptBet extends Component {
   getQuota = () => {
-    const ratio =
-      this.props.bet.minimumOppositeBet / this.props.bet.originalBet;
-    const ratioPlusOwnBet = ratio + 1;
-
-    return ratioPlusOwnBet.toFixed(2);
+    return this.props.bet.quota.toFixed(2);
   };
 
   getTypeOfBetResult = () => {
+    if (!this.props.bet.match) {
+      return "";
+    }
     switch (this.props.bet.result) {
       case 0: //EMPATA
         return " no empatan";
@@ -25,7 +24,7 @@ export class PopupAcceptBet extends Component {
   };
 
   acceptBet = () => {
-    this.props.acceptBetFunction(this.state.bet);
+    this.props.acceptBetFunction(this.props.bet);
   };
 
   render() {
@@ -46,7 +45,7 @@ export class PopupAcceptBet extends Component {
             </div>
             <div className="bet-quotas-container">
               <div className="bet-opposite">
-                {this.props.bet.minimumOppositeBet} ETH
+                {this.props.bet.minimumCounterBet} ETH
                 <img
                   className="bet-logo"
                   src="/img/eth.png"

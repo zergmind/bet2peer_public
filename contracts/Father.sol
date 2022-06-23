@@ -91,6 +91,10 @@ contract Father {
         }
     }
 
+    function addBetToCounterGambler(address counterGambler, address _sonContract) public payable{
+        contractsByUser[counterGambler].push(_sonContract);
+    }
+
     /**
     Función que devuelve todos los contratos(apuestas) creadas por un usuario
     _user: dirección del usuario del que se muestran las apuestas

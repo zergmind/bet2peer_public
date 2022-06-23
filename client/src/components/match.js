@@ -4,6 +4,7 @@ import { BetList } from "./bet-list";
 export class Match extends Component {
   componentDidMount = async () => {
     const showMatchBets = false;
+
     this.setState({ showMatchBets });
   };
 
