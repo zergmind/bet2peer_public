@@ -1,6 +1,4 @@
 const HDWalletProvider = require("@truffle/hdwallet-provider");
-const developmentMnemonic =
-  "cabbage ordinary spare plastic language stone suggest speed duck twelve bamboo helmet";
 const path = require("path");
 
 module.exports = {

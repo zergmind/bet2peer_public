@@ -8,6 +8,8 @@ export class FatherContractService {
   fatherContractABI = FatherContractJSON.abi;
   // fatherContractAddress = "0x744e7aAE80daF5978EC3d0c9eD516b9bF7fD928e";
   // fatherContractAddress = "0x8fff9e4CaA54a25498BC89850CEFD66F722c8ddC"; //Contrato de Chus en Ganache
+  //Transacción del deploy
+  //https://mumbai.polygonscan.com/tx/0xda3090bd0b52202e2d9ad5cb5f6fb09b826b165a3292d7847617467ea929c47a
   fatherContractAddress = "0x7e34ac1a95d82e7ff3a1e129560923050bbe81b6"; //Dirección de Mumbai
   web3;
   fatherContract;

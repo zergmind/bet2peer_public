@@ -85,10 +85,6 @@ class App extends Component {
       const sonContractService = new SonContractService();
       await sonContractService.configureService(web3Service, account);
 
-      // await fatherContractService.getSonContractMatchId(
-      //   userBets[0].contractAddress,
-      //   account
-      // );
       this.setState({
         accounts,
         account,
@@ -143,24 +139,20 @@ class App extends Component {
     for (let i = 0; i < matches.length; i++) {
       var match = matches[i];
       match.bets = [];
-      await fatherContractService
-        .getBetsByMatchId(account, match.id)
-        .then(async (bets) => {
-          for (let j = 0; j < bets.length; j++) {
-            let newBet = await sonContractService.getAllData(
-              bets[j].contractAddress,
-              matches
-            );
-            newBet.match = match;
+      const bets = await fatherContractService.getBetsByMatchId(
+        account,
+        match.id
+      );
+      for (let j = 0; j < bets.length; j++) {
+        let newBet = await sonContractService.getAllData(
+          bets[j].contractAddress,
+          matches
+        );
 
-            if (
-              !newBet.isTheUserTheOwner &&
-              !newBet.isTheUserTheCounterGambler
-            ) {
-              match.bets.push(newBet);
-            }
-          }
-        });
+        if (!newBet.isTheUserTheOwner && !newBet.isTheUserTheCounterGambler) {
+          match.bets.push(newBet);
+        }
+      }
     }
 
     this.setState({ matches });
