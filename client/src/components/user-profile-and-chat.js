@@ -13,6 +13,7 @@ export class UserProfileAndChat extends Component {
           networkType={this.props.networkType}
           userBets={this.props.userBets}
           sonContractService={this.props.sonContractService}
+          showPopupCancelBetFunction={this.props.showPopupCancelBetFunction}
         ></UserProfile>
         <Chat messages={this.props.messages}></Chat>
         <ChatForm

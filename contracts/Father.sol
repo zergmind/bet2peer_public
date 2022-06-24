@@ -85,7 +85,7 @@ contract Father {
         uint256 _index = indexOf(contractsByUser[msg.sender], _contract);
         uint256 _index2 = indexOf(contractsByMatchId[bet.getMatchId()], _contract);
         //si el contrato se desactiva correctamente elimino el address de los arrays
-        if(bet.removeBet()){
+        if(bet.removeBet(msg.sender)){
             delete contractsByUser[msg.sender][_index];
             delete contractsByMatchId[bet.getMatchId()][_index2];
         }

@@ -22,6 +22,10 @@ export class Web3Service {
     return this.web3.eth.net.getNetworkType();
   };
 
+  getBalance = async (account) => {
+    return this.web3.eth.getBalance(account);
+  };
+
   //EXTRAÍDO DEL EJEMPLO ORIGINAL
   // const deployedNetwork = SimpleStorageContract.networks[networkId];
   // const instance = new web3.eth.Contract(

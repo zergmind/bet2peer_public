@@ -155,8 +155,8 @@ contract Bet2Peer is Ownable {
     Función que elimina la apuesta en caso de no estar aceptada
     Returns: true si la apuesta se elimina correctamente
      */
-    function removeBet() public payable 
-        isOriginalOwner(msg.sender)
+    function removeBet(address _originalOwner) public payable 
+        isOriginalOwner(_originalOwner)
         contractActive
         returns (bool)
     {

@@ -2,38 +2,37 @@ import React, { Component } from "react";
 import MatchDescription from "./match-description.js";
 import Popup from "./popup.js";
 
-export class PopupAcceptBet extends Component {
+export class PopupCancelBet extends Component {
   getQuota = () => {
     return this.props.bet.quota.toFixed(2);
   };
 
-  getTypeOfBetResult = () => {
+  getTypeOfBetResult = (bet) => {
     if (!this.props.bet.match) {
       return "";
     }
-    switch (this.props.bet.result) {
+    const modifier = bet.isTheUserTheCounterGambler ? " no" : "";
+    switch (bet.result) {
       case 0: //EMPATA
-        return " no empatan";
+        return `${modifier} empatan`;
       case 1:
-        return ` no gana el ${this.props.bet.match.localName}`;
+        return `${modifier} gana el ${bet.match.localName}`;
       case 2:
-        return ` no gana el ${this.props.bet.match.visitorName}`;
+        return `${modifier} gana el ${bet.match.visitorName}`;
       default:
         return "";
     }
   };
 
-  acceptBet = () => {
-    this.props.acceptBetFunction(this.props.bet);
+  cancelBet = () => {
+    this.props.cancelBetFunction(this.props.bet);
   };
-
-  canAffordBet = () => {};
 
   render() {
     return (
       <Popup
-        title={"Aceptar apuesta"}
-        closeFunction={this.props.closePopupAcceptBetFunction}
+        title={"Cancelar apuesta"}
+        closeFunction={this.props.closePopupCancelBetFunction}
       >
         <MatchDescription match={this.props.bet.match}></MatchDescription>
         <div className="accept-description-container">
@@ -47,21 +46,21 @@ export class PopupAcceptBet extends Component {
             </div>
             <div className="bet-quotas-container">
               <div className="bet-opposite">
-                {this.props.bet.minimumCounterBet} ETH
+                {this.props.bet.quantity} ETH
                 <img
                   className="bet-logo"
                   src="/img/eth.png"
                   alt="logo ethereum"
                 ></img>
               </div>
-              <div>{this.getTypeOfBetResult()} &nbsp;</div>
-              <div> a cuota {this.getQuota()}</div>
+              <div>{this.getTypeOfBetResult(this.props.bet)} &nbsp;</div>
+              <div> a cuota {this.getQuota(this.props.bet)}</div>
             </div>
           </div>
         </div>
         <div className="btn-container">
-          <button className="btn" onClick={this.acceptBet}>
-            Aceptar
+          <button className="btn" onClick={this.cancelBet}>
+            Cancelar apuesta
           </button>
         </div>
       </Popup>

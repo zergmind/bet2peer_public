@@ -17,6 +17,7 @@ import { UserProfileAndChat } from "./components/user-profile-and-chat.js";
 import { PopupCreateBet } from "./components/popup-create-bet";
 import { PopupAcceptBet } from "./components/popup-accept-bet";
 import { PopupLoading } from "./components/popup-loading";
+import { PopupCancelBet } from "./components/popup-cancel-bet.js";
 
 class App extends Component {
   state = {
@@ -36,8 +37,10 @@ class App extends Component {
     selectedMatchId: null,
     showPopupCreateBet: false,
     showPopupAcceptBet: false,
+    showPopupCancelBet: false,
     showPopupLoading: false,
     userBets: [],
+    currentAccountBalance: 0,
   };
 
   componentDidMount = async () => {
@@ -74,13 +77,15 @@ class App extends Component {
       const account = accounts[0];
       const networkId = await web3Service.getNetworkId();
       const networkType = await web3Service.getNetworkType();
+      const currentAccountBalance = await web3Service.getBalance(account);
+
       //Evento cuando cambian las cuentas
       window.ethereum.on("accountsChanged", function (accounts) {
         window.location.reload();
       });
 
       const fatherContractService = new FatherContractService();
-      await fatherContractService.configureService(web3Service);
+      await fatherContractService.configureService(web3Service, networkId);
 
       const sonContractService = new SonContractService();
       await sonContractService.configureService(web3Service, account);
@@ -92,6 +97,7 @@ class App extends Component {
         networkType,
         fatherContractService,
         sonContractService,
+        currentAccountBalance,
       });
     } catch (error) {}
   };
@@ -178,16 +184,36 @@ class App extends Component {
     this.closePopupLoading();
   };
 
+  cancelBet = async (bet) => {
+    const { fatherContractService, account } = this.state;
+
+    this.setState({ showPopupCancelBet: false, showPopupLoading: true });
+    await fatherContractService.cancelBet(bet, account, this.cancelBetFinished);
+  };
+
+  cancelBetFinished = async (arg) => {
+    await this.loadUserBetsWithData();
+    this.closePopupLoading();
+  };
+
+  showPopupCancelBetFunction = (bet) => {
+    this.setState({ selectedBet: bet, showPopupCancelBet: true });
+  };
+
+  closePopupCancelBet = () => {
+    this.setState({ showPopupCancelBet: false });
+  };
+
+  closePopupLoading = () => {
+    this.setState({ showPopupLoading: false });
+  };
+
   showPopupAcceptBet = (bet) => {
     this.setState({ selectedBet: bet, showPopupAcceptBet: true });
   };
 
   closePopupAcceptBet = () => {
     this.setState({ showPopupAcceptBet: false });
-  };
-
-  closePopupLoading = () => {
-    this.setState({ showPopupLoading: false });
   };
 
   acceptBet = async (bet) => {
@@ -258,6 +284,7 @@ class App extends Component {
               account={this.props.account}
               networkType={this.props.networkType}
               sonContractService={this.state.sonContractService}
+              showPopupCancelBetFunction={this.showPopupCancelBetFunction}
             ></UserProfile>
           ) : null}
           {this.state.showChat ? (
@@ -277,6 +304,7 @@ class App extends Component {
             userBets={this.state.userBets}
             sendMessageFunction={this.sendMessage}
             sonContractService={this.state.sonContractService}
+            showPopupCancelBetFunction={this.showPopupCancelBetFunction}
           ></UserProfileAndChat>
         </div>
         {this.state.showPopupCreateBet ? (
@@ -284,6 +312,8 @@ class App extends Component {
             match={this.state.selectedMatch}
             createBetFunction={this.createBet}
             closePopupCreateBetFunction={this.closePopupCreateBet}
+            web3Service={this.state.web3Service}
+            currentAccountBalance={this.state.currentAccountBalance}
           ></PopupCreateBet>
         ) : null}
         {this.state.showPopupAcceptBet ? (
@@ -291,7 +321,16 @@ class App extends Component {
             bet={this.state.selectedBet}
             acceptBetFunction={this.acceptBet}
             closePopupAcceptBetFunction={this.closePopupAcceptBet}
+            web3Service={this.state.web3Service}
+            currentAccountBalance={this.state.currentAccountBalance}
           ></PopupAcceptBet>
+        ) : null}
+        {this.state.showPopupCancelBet ? (
+          <PopupCancelBet
+            bet={this.state.selectedBet}
+            cancelBetFunction={this.cancelBet}
+            closePopupCancelBetFunction={this.closePopupCancelBet}
+          ></PopupCancelBet>
         ) : null}
         {this.state.showPopupLoading ? (
           <PopupLoading
