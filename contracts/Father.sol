@@ -86,8 +86,8 @@ contract Father {
         uint256 _index2 = indexOf(contractsByMatchId[bet.getMatchId()], _contract);
         //si el contrato se desactiva correctamente elimino el address de los arrays
         if(bet.removeBet()){
-            delete contractsByUser[msg.sender][_index];
-            delete contractsByMatchId[bet.getMatchId()][_index2];
+            remove(_index);
+            remove(_index2);
         }
     }
 
@@ -130,6 +130,11 @@ contract Father {
       }
     }
     revert("Not Found");
+  }
+
+  function remove(uint _index) public{
+    firstArray[_index] = firstArray[firstArray.length - 1];
+    firstArray.pop();
   }
 
 
