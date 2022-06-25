@@ -59,7 +59,7 @@ contract Father {
     _originalBet: cantidad apostada
     _minimumCounterBet: cantidad a percibir en caso de ganar
      */
-    function createBet(uint256 _matchId, uint8 _result, uint256 _originalBet, uint8 _minimumCounterBet) public payable 
+    function createBet(uint256 _matchId, uint8 _result, uint256 _originalBet, uint256 _minimumCounterBet) public payable 
         contractActive
     {
         //Creo un nuevo contrato hijo para la apuesta

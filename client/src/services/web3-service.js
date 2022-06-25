@@ -22,8 +22,25 @@ export class Web3Service {
     return this.web3.eth.net.getNetworkType();
   };
 
+  getChainId = async () => {
+    return this.web3.eth.getChainId();
+  };
+
   getBalance = async (account) => {
     return this.web3.eth.getBalance(account);
+  };
+
+  getCurrentSymbol = async () => {
+    const chainId = await this.web3.eth.getChainId();
+    //AQUÍ SE PUEDEN EXTRAER TODAS LAS REDES CON SUS SÍMBOLOS
+    //https://chainid.network/chains.json
+    switch (chainId) {
+      case 137: //Polygon production
+      case 80001: //Polygon Mumbai
+        return "MATIC";
+      default:
+        return "ETH";
+    }
   };
 
   //EXTRAÍDO DEL EJEMPLO ORIGINAL

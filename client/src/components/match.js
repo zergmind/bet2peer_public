@@ -12,25 +12,6 @@ export class Match extends Component {
     return (
       <div className="match-and-bets">
         <div className="match-container">
-          {this.props.match.bets && this.props.match.bets.length > 0 ? (
-            <div
-              className="show-bets"
-              onClick={() => {
-                this.setState({ showMatchBets: !this.state.showMatchBets });
-              }}
-            >
-              {this.state.showMatchBets ? (
-                <span className="hide-bets">
-                  {" "}
-                  Ocultar {this.props.match.bets.length} apuestas
-                </span>
-              ) : (
-                <span>Mostrar {this.props.match.bets.length} apuestas</span>
-              )}
-            </div>
-          ) : (
-            <div className="no-bets">No hay apuestas</div>
-          )}
           {/* ESTO ESTÁ DUPLICADO EN MATCH DESCRIPTION MEJORAR EN EL FUTURO */}
           <div className="team-local">
             <div className="team-name">{this.props.match.localName}</div>
@@ -47,6 +28,22 @@ export class Match extends Component {
             />
             <div className="team-name">{this.props.match.visitorName}</div>
           </div>
+          {this.props.match.bets && this.props.match.bets.length > 0 ? (
+            <div
+              className="show-bets"
+              onClick={() => {
+                this.setState({ showMatchBets: !this.state.showMatchBets });
+              }}
+            >
+              {this.state.showMatchBets ? (
+                <span className="hide-bets"> Ocultar apuestas</span>
+              ) : (
+                <span>Ver apuestas disponibles</span>
+              )}
+            </div>
+          ) : (
+            <div className="show-bets"></div>
+          )}
           <div className="btn-create-bet">
             <button
               className="btn"
@@ -54,13 +51,14 @@ export class Match extends Component {
                 this.props.showPopupCreateBetFunction(this.props.match)
               }
             >
-              Nueva apuesta
+              Crear apuesta
             </button>
           </div>
         </div>
         {this.state && this.state.showMatchBets ? (
           <BetList
             bets={this.props.match.bets}
+            currentSymbol={this.props.currentSymbol}
             showPopupAcceptBetFunction={this.props.showPopupAcceptBetFunction}
           ></BetList>
         ) : null}

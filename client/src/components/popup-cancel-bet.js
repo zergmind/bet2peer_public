@@ -40,7 +40,7 @@ export class PopupCancelBet extends Component {
           <div className="accept-description">
             <div className="bet-logo">
               <img
-                src="/img/logos/png/flat/imago-tipo-color.png"
+                src="/img/logos/png/degradado/imago-tipo-color.png"
                 alt="logo"
               ></img>
             </div>

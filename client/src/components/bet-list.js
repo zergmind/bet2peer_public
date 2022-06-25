@@ -30,18 +30,13 @@ export class BetList extends Component {
               <div className="empty-column"></div>
               <div className="bet-logo">
                 <img
-                  src="/img/logos/png/flat/imago-tipo-color.png"
+                  src="/img/logos/png/degradado/imago-tipo-color.png"
                   alt="logo"
                 ></img>
               </div>
               <div className="bet-quotas-container">
                 <div className="bet-opposite">
-                  {bet.minimumCounterBet} ETH
-                  <img
-                    className="bet-logo"
-                    src="/img/eth.png"
-                    alt="logo ethereum"
-                  ></img>
+                  {bet.minimumCounterBet} {this.props.currentSymbol} &nbsp;
                 </div>
                 <div>{this.getTypeOfBetResult(bet)} &nbsp;</div>
                 <div> a cuota {this.getQuota(bet)}</div>

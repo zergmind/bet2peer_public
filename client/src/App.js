@@ -41,28 +41,24 @@ class App extends Component {
     showPopupLoading: false,
     userBets: [],
     currentAccountBalance: 0,
+    currentSymbol: "",
   };
 
   componentDidMount = async () => {
     try {
       // Get network provider and web3 instance.
-
       await this.loadServices();
       const websocketService = new WebsocketService();
       websocketService.setReceiveMessage(this.receiveMessage);
 
       const sportMonksService = new SportMonksService();
-      await sportMonksService.getCurrentMatches().then((data) => {
-        // this.getBetsByMatches(data);
-        this.setState({ matches: data });
-        this.loadMatchBetsWithData(data);
-      });
 
       this.setState({
         websocketService,
         sportMonksService,
       });
 
+      await this.loadMatchBets();
       await this.loadUserBetsWithData();
     } catch (error) {
       // Catch any errors for any of the above operations.
@@ -78,6 +74,7 @@ class App extends Component {
       const networkId = await web3Service.getNetworkId();
       const networkType = await web3Service.getNetworkType();
       const currentAccountBalance = await web3Service.getBalance(account);
+      const currentSymbol = await web3Service.getCurrentSymbol();
 
       //Evento cuando cambian las cuentas
       window.ethereum.on("accountsChanged", function (accounts) {
@@ -98,6 +95,7 @@ class App extends Component {
         fatherContractService,
         sonContractService,
         currentAccountBalance,
+        currentSymbol,
       });
     } catch (error) {}
   };
@@ -120,6 +118,16 @@ class App extends Component {
     let messageToAdd = { id: messages.length, ...message };
     messages.push(messageToAdd);
     this.setState({ messages });
+  };
+
+  loadMatchBets = async () => {
+    const { sportMonksService } = this.state;
+
+    await sportMonksService.getCurrentMatches().then((matches) => {
+      // this.getBetsByMatches(data);
+      this.setState({ matches });
+      this.loadMatchBetsWithData(matches);
+    });
   };
 
   loadUserBetsWithData = async () => {
@@ -161,7 +169,7 @@ class App extends Component {
       }
     }
 
-    this.setState({ matches });
+    this.setState({ matches: [...matches] });
   };
 
   showPopupCreateBet = (match) => {
@@ -174,7 +182,6 @@ class App extends Component {
 
   createBet = async (bet) => {
     const { fatherContractService, account } = this.state;
-    debugger;
 
     this.setState({ showPopupCreateBet: false, showPopupLoading: true });
     await fatherContractService.createBet(bet, account, this.createBetFinished);
@@ -219,13 +226,15 @@ class App extends Component {
 
   acceptBet = async (bet) => {
     const { sonContractService, account } = this.state;
-    await sonContractService.acceptBet(bet, account, this.acceptBetFinished);
 
     this.setState({ showPopupAcceptBet: false, showPopupLoading: true });
+    await sonContractService.acceptBet(bet, account, this.acceptBetFinished);
   };
 
   acceptBetFinished = async (arg) => {
+    const { matches } = this.state;
     await this.loadUserBetsWithData();
+    await this.loadMatchBetsWithData(matches);
     this.closePopupLoading();
   };
 
@@ -277,13 +286,14 @@ class App extends Component {
               matches={this.state.matches}
               showPopupCreateBetFunction={this.showPopupCreateBet}
               showPopupAcceptBetFunction={this.showPopupAcceptBet}
+              currentSymbol={this.state.currentSymbol}
             ></MatchList>
           ) : null}
           {this.state.showUser ? (
             <UserProfile
-              networkId={this.props.networkId}
-              account={this.props.account}
-              networkType={this.props.networkType}
+              networkId={this.state.networkId}
+              networkType={this.state.networkType}
+              account={this.state.accounts ? this.state.accounts[0] : null}
               sonContractService={this.state.sonContractService}
               showPopupCancelBetFunction={this.showPopupCancelBetFunction}
             ></UserProfile>
@@ -315,6 +325,7 @@ class App extends Component {
             closePopupCreateBetFunction={this.closePopupCreateBet}
             web3Service={this.state.web3Service}
             currentAccountBalance={this.state.currentAccountBalance}
+            currentSymbol={this.state.currentSymbol}
           ></PopupCreateBet>
         ) : null}
         {this.state.showPopupAcceptBet ? (
@@ -324,6 +335,7 @@ class App extends Component {
             closePopupAcceptBetFunction={this.closePopupAcceptBet}
             web3Service={this.state.web3Service}
             currentAccountBalance={this.state.currentAccountBalance}
+            currentSymbol={this.state.currentSymbol}
           ></PopupAcceptBet>
         ) : null}
         {this.state.showPopupCancelBet ? (
@@ -331,6 +343,7 @@ class App extends Component {
             bet={this.state.selectedBet}
             cancelBetFunction={this.cancelBet}
             closePopupCancelBetFunction={this.closePopupCancelBet}
+            currentSymbol={this.state.currentSymbol}
           ></PopupCancelBet>
         ) : null}
         {this.state.showPopupLoading ? (

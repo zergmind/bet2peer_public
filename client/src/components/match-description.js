@@ -2,7 +2,7 @@ import React from "react";
 
 export default ({ match }) => {
   return (
-    <div className="match-container">
+    <div className="match-container match-description">
       <div className="team-local">
         <div className="team-name">{match.localName}</div>
         <img src={match.localImageUrl} alt="equipo_local" />

@@ -12,6 +12,7 @@ export class MatchList extends Component {
                 showPopupAcceptBetFunction={
                   this.props.showPopupAcceptBetFunction
                 }
+                currentSymbol={this.props.currentSymbol}
                 showPopupCreateBetFunction={
                   this.props.showPopupCreateBetFunction
                 }

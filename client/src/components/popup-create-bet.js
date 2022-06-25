@@ -8,29 +8,46 @@ export class PopupCreateBet extends Component {
     bet: new Bet(),
   };
   componentDidMount() {
+    const { bet } = this.state;
+    bet.quota = 1.5; //Cuota por defecto
+    bet.match = this.props.match;
     this.setState({
-      bet: { match: this.props.match, ...this.state.bet },
+      bet,
     });
   }
+
   quantityChange = (e) => {
     const { bet } = this.state;
     bet.quantity = e.target.value;
     this.setState({ bet });
   };
+
   quotaChange = (e) => {
     const { bet } = this.state;
     bet.quota = e.target.value;
     this.setState({ bet });
   };
+
   resultChange = (e) => {
     const { bet } = this.state;
     bet.result = e.target.value;
     this.setState({ bet });
   };
+
   createBet = () => {
     const { bet } = this.state;
     this.props.createBetFunction(bet);
   };
+
+  earningResult() {
+    const { bet } = this.state;
+    if (bet.quota && bet.quantity && bet.quantity > 0) {
+      return `Ganarías ${bet.quantity * bet.quota} ${this.props.currentSymbol}`;
+    } else {
+      return "";
+    }
+  }
+
   render() {
     return (
       <Popup
@@ -38,23 +55,9 @@ export class PopupCreateBet extends Component {
         closeFunction={this.props.closePopupCreateBetFunction}
       >
         <MatchDescription match={this.props.match}></MatchDescription>
-        {/* <div className="match-container">
-          <div className="team-local">
-            <div className="team-name">{this.props.match.localName}</div>
-            <img src={this.props.match.localImageUrl} alt="equipo_local" />
-          </div>
-          <div className="vs">vs</div>
-          <div className="team-visitor">
-            <img
-              src={this.props.match.visitorImageUrl}
-              alt="equipo_visitante"
-            />
-            <div className="team-name">{this.props.match.visitorName}</div>
-          </div>
-        </div> */}
         <div>
           <div className="create-bet-your-bet">
-            <div>Tu apuesta...</div>
+            <div>¿Cuánto {this.props.currentSymbol} quieres apostar?</div>
             <input
               type="number"
               className="textbox"
@@ -62,10 +65,11 @@ export class PopupCreateBet extends Component {
             ></input>
           </div>
           <div className="create-bet-quota">
-            <div>A una cuota de...</div>
+            <div>¿A qué cuota? &nbsp; {this.earningResult()}</div>
             <input
               type="number"
               className="textbox"
+              value={this.state.bet.quota}
               onChange={this.quotaChange}
             ></input>
           </div>

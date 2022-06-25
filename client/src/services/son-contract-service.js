@@ -40,6 +40,7 @@ export class SonContractService {
       bet.minimumCounterBet.toString(),
       "ether"
     );
+    debugger;
     const gasAmount = await sonContract.methods
       .acceptBet()
       .estimateGas({ from: account, value: amountToSend })
@@ -72,18 +73,18 @@ export class SonContractService {
           bet.matchId = data[2];
           bet.result = parseInt(data[3]);
           bet.isTheUserTheOwner = this.userAccount === data.originalOwner;
-          bet.minimumCounterBet = parseFloat(data[5]);
+          bet.minimumCounterBet = this.web3.utils.fromWei(data[5], "ether");
           bet.isTheUserTheCounterGambler =
             this.userAccount === bet.counterGambler;
-          bet.quantity = parseFloat(data[4]);
-
+          bet.quantity = this.web3.utils.fromWei(data[4], "ether");
           if (bet.isTheUserTheOwner) {
             bet.quota =
-              parseFloat(bet.minimumCounterBet) / parseFloat(bet.quantity);
+              (parseFloat(bet.minimumCounterBet) + parseFloat(bet.quantity)) /
+              parseFloat(bet.quantity);
           } else {
-            bet.minimumCounterBet = bet.minimumCounterBet - bet.quantity;
-            bet.quota = bet.quantity / bet.minimumCounterBet;
-            bet.quota++;
+            bet.quota =
+              (parseFloat(bet.quantity) + parseFloat(bet.minimumCounterBet)) /
+              parseFloat(bet.minimumCounterBet);
           }
 
           const match = matches.find(
