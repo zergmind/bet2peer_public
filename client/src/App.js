@@ -174,6 +174,7 @@ class App extends Component {
 
   createBet = async (bet) => {
     const { fatherContractService, account } = this.state;
+    debugger;
 
     this.setState({ showPopupCreateBet: false, showPopupLoading: true });
     await fatherContractService.createBet(bet, account, this.createBetFinished);

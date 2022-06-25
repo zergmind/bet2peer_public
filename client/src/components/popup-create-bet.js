@@ -14,15 +14,18 @@ export class PopupCreateBet extends Component {
   }
   quantityChange = (e) => {
     const { bet } = this.state;
-    this.setState({ bet: { quantity: e.target.value, ...bet } });
+    bet.quantity = e.target.value;
+    this.setState({ bet });
   };
   quotaChange = (e) => {
     const { bet } = this.state;
-    this.setState({ bet: { quota: e.target.value, ...bet } });
+    bet.quota = e.target.value;
+    this.setState({ bet });
   };
   resultChange = (e) => {
     const { bet } = this.state;
-    this.setState({ bet: { result: e.target.value, ...bet } });
+    bet.result = e.target.value;
+    this.setState({ bet });
   };
   createBet = () => {
     const { bet } = this.state;

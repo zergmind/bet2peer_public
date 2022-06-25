@@ -85,7 +85,7 @@ export class SonContractService {
             bet.quota = bet.quantity / bet.minimumCounterBet;
             bet.quota++;
           }
-          debugger;
+
           const match = matches.find(
             (match) => parseInt(match.id) === parseInt(bet.matchId)
           );

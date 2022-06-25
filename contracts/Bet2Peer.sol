@@ -107,6 +107,12 @@ contract Bet2Peer is Ownable {
     }
 
     // -------------------Functions ------------------
+
+    /**
+    Función para recibir los fondos desde el contrato padre
+     */
+    receive() external payable {}
+
     /**
     Función para aceptar la apuesta de otro usuario
      */

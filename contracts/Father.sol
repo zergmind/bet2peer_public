@@ -64,6 +64,12 @@ contract Father {
     {
         //Creo un nuevo contrato hijo para la apuesta
         bet = new Bet2Peer(msg.sender, _matchId, _result, _originalBet, _minimumCounterBet, address(this));
+        // address contractAddress = address(bet);
+        address payable payableContractAddress = payable(address(bet));
+        // address payable payableContractAddress = address(uint160(contractAddress));
+        payableContractAddress.transfer(msg.value);
+
+        // payable(bet).transfer(msg.value);
         //Añado la dirección del contrato a los mapas del usuario y del partido
         contractsByUser[msg.sender].push(bet.getContractAddress());
         contractsByMatchId[_matchId].push(bet.getContractAddress());
@@ -75,19 +81,19 @@ contract Father {
     _contracto: dirección de la apuesta que se quiere eliminar
     _matchId: id del partido de la apuesta
      */
-    function removeBet(address _contract) public
+    function removeBet(address payable _contract) public
         contractActive
     {
         //Asigno a la variable bet el contrato hijo en cuestión
         bet = Bet2Peer(_contract);
         require(bet.getOriginalOwner() == msg.sender, "No eres el creador de esta apuesta");
         //busco el index del contrato en los arrays del usurio y partido
-        uint256 _index = indexOf(contractsByUser[msg.sender], _contract);
-        uint256 _index2 = indexOf(contractsByMatchId[bet.getMatchId()], _contract);
+        uint256 _userContractIndex = indexOf(contractsByUser[msg.sender], _contract);
+        uint256 _matchContractIndex = indexOf(contractsByMatchId[bet.getMatchId()], _contract);
         //si el contrato se desactiva correctamente elimino el address de los arrays
         if(bet.removeBet(msg.sender)){
-            delete contractsByUser[msg.sender][_index];
-            delete contractsByMatchId[bet.getMatchId()][_index2];
+            removeBetFromUser(msg.sender, _userContractIndex);
+            removeBetFromMatch(bet.getMatchId(), _matchContractIndex);
         }
     }
 
@@ -130,6 +136,16 @@ contract Father {
       }
     }
     revert("Not Found");
+  }
+
+  function removeBetFromMatch(uint256 _matchId, uint _index) public{
+    contractsByMatchId[_matchId][_index] = contractsByMatchId[_matchId][contractsByMatchId[_matchId].length - 1];
+    contractsByMatchId[_matchId].pop();
+  }
+
+  function removeBetFromUser(address _userAddress, uint _index) public{
+    contractsByUser[_userAddress][_index] = contractsByUser[_userAddress][contractsByUser[_userAddress].length - 1];
+    contractsByUser[_userAddress].pop();
   }
 
 

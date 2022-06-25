@@ -25,7 +25,7 @@ export class FatherContractService {
         break;
       case 5777:
         this.fatherContractAddress =
-          "0xbdD83824Ee8B40a3202bdA3A2F3c31656161A3eF"; //Ganache
+          "0x205A04Fa7eD0a9c8B8aF9ac1a8EE0369C2313e6b"; //Ganache
     }
 
     this.fatherContract = await new this.web3.eth.Contract(
@@ -47,7 +47,10 @@ export class FatherContractService {
 
     return this.fatherContract.methods
       .createBet(bet.match.id, bet.result, bet.quantity, minimumCounterBet)
-      .send({ from: account, value: amountToSend, gas: gasAmount }, callback);
+      .send(
+        { from: account, value: amountToSend, gas: gasAmount * 2 }, //TO-DO AVERIGUAR BIEN EL COSTE DEL GAS
+        callback
+      );
   };
 
   cancelBet = async (bet, account, callback) => {
