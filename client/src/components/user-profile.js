@@ -16,10 +16,20 @@ export class UserProfile extends Component {
     }
   };
 
+  getBetQuantity = (bet) => {
+    return bet.isTheUserTheCounterGambler
+      ? bet.minimumCounterBet
+      : bet.quantity;
+  };
+
   isAllowedToCancelBet = (bet) => {
     //Sólo se puede cancelar la apuesta si el usuario es el creador de la apuesta
     //Y si todavía nadie se la ha aceptado
     return bet.isTheUserTheOwner && bet.counterGambler === this.nullAddress;
+  };
+
+  isAllowedToResolveBet = (bet) => {
+    return bet.counterGambler !== this.nullAddress;
   };
 
   render() {
@@ -70,7 +80,7 @@ export class UserProfile extends Component {
                           </div>
                           <div>
                             <div className="bet-quantity">
-                              {bet.quantity}
+                              {this.getBetQuantity(bet)}
                               <img
                                 className="bet-logo"
                                 src="/img/eth.png"
@@ -89,6 +99,16 @@ export class UserProfile extends Component {
                             className="btn small-btn"
                           >
                             Cancelar
+                          </button>
+                        ) : null}
+                        {this.isAllowedToResolveBet(bet) ? (
+                          <button
+                            onClick={() => {
+                              this.props.showPopupResolveBetFunction(bet);
+                            }}
+                            className="btn small-btn green"
+                          >
+                            Resolver
                           </button>
                         ) : null}
                       </div>

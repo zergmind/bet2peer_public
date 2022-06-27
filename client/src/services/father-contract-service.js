@@ -20,7 +20,7 @@ export class FatherContractService {
         break;
       case 5777:
         this.fatherContractAddress =
-          "0x163614bb6fCC975C1c7CA09A5384Af5fa9C7De7E"; //Ganache Chus
+          "0xEf720623Da37bc367C612d6DB0f398A54aB0e6fB"; //Ganache Chus
     }
 
     this.fatherContract = await new this.web3.eth.Contract(
@@ -61,6 +61,20 @@ export class FatherContractService {
 
     return this.fatherContract.methods
       .removeBet(bet.contractAddress)
+      .send({ from: account, gas: gasAmount }, callback);
+  };
+
+  resolveBet = async (bet, account, callback) => {
+    console.log(account);
+    if (!this.fatherContract) return;
+
+    const gasAmount = await this.fatherContract.methods
+      .resolveBet(bet.contractAddress)
+      .estimateGas({ from: account })
+      .then((gasAmount) => gasAmount);
+
+    return this.fatherContract.methods
+      .resolveBet(bet.contractAddress)
       .send({ from: account, gas: gasAmount }, callback);
   };
 

@@ -247,6 +247,10 @@ li{
     border-radius: 4px;
     background: #554772;
 }
+.btn.small-btn.green{
+    font-size: 14px;
+    background: #3bed58;
+}
 .user-profile{
     display: grid;
     grid-template-rows: auto auto 1fr;

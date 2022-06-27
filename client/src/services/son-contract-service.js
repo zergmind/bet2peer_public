@@ -40,7 +40,7 @@ export class SonContractService {
       bet.minimumCounterBet.toString(),
       "ether"
     );
-    debugger;
+
     const gasAmount = await sonContract.methods
       .acceptBet()
       .estimateGas({ from: account, value: amountToSend })
@@ -55,6 +55,29 @@ export class SonContractService {
       callback
     );
   };
+
+  // resolveBet = async (bet, account, callback) => {
+  //   console.log(account);
+  //   const sonContract = await new this.web3.eth.Contract(
+  //     this.sonContractABI,
+  //     bet.contractAddress
+  //   );
+
+  //   const amountToSend = this.web3.utils.toWei("0", "ether");
+  //   const gasAmount = await sonContract.methods
+  //     .resolveBet()
+  //     .estimateGas({ from: account, value: amountToSend })
+  //     .then((gasAmount) => gasAmount);
+
+  //   return await sonContract.methods.resolveBet().send(
+  //     {
+  //       from: account,
+  //       value: amountToSend,
+  //       gas: gasAmount,
+  //     },
+  //     callback
+  //   );
+  // };
 
   getAllData = async (contractAddress, matches) => {
     const sonContract = await new this.web3.eth.Contract(

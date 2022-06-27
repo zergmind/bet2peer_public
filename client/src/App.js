@@ -18,6 +18,7 @@ import { PopupCreateBet } from "./components/popup-create-bet";
 import { PopupAcceptBet } from "./components/popup-accept-bet";
 import { PopupLoading } from "./components/popup-loading";
 import { PopupCancelBet } from "./components/popup-cancel-bet.js";
+import { PopupResolveBet } from "./components/popup-resolve-bet";
 
 class App extends Component {
   state = {
@@ -38,6 +39,7 @@ class App extends Component {
     showPopupCreateBet: false,
     showPopupAcceptBet: false,
     showPopupCancelBet: false,
+    showPopupResolveBet: false,
     showPopupLoading: false,
     userBets: [],
     currentAccountBalance: 0,
@@ -212,6 +214,30 @@ class App extends Component {
     this.setState({ showPopupCancelBet: false });
   };
 
+  resolveBet = async (bet) => {
+    const { fatherContractService, account } = this.state;
+
+    this.setState({ showPopupResolveBet: false, showPopupLoading: true });
+    await fatherContractService.resolveBet(
+      bet,
+      account,
+      this.resolveBetFinished
+    );
+  };
+
+  resolveBetFinished = async (arg) => {
+    await this.loadUserBetsWithData();
+    this.closePopupLoading();
+  };
+
+  showPopupResolveBetFunction = (bet) => {
+    this.setState({ selectedBet: bet, showPopupResolveBet: true });
+  };
+
+  closePopupResolveBet = () => {
+    this.setState({ showPopupResolveBet: false });
+  };
+
   closePopupLoading = () => {
     this.setState({ showPopupLoading: false });
   };
@@ -296,6 +322,7 @@ class App extends Component {
               account={this.state.accounts ? this.state.accounts[0] : null}
               sonContractService={this.state.sonContractService}
               showPopupCancelBetFunction={this.showPopupCancelBetFunction}
+              showPopupResolveBetFunction={this.showPopupResolveBetFunction}
             ></UserProfile>
           ) : null}
           {this.state.showChat ? (
@@ -316,6 +343,7 @@ class App extends Component {
             sendMessageFunction={this.sendMessage}
             sonContractService={this.state.sonContractService}
             showPopupCancelBetFunction={this.showPopupCancelBetFunction}
+            showPopupResolveBetFunction={this.showPopupResolveBetFunction}
           ></UserProfileAndChat>
         </div>
         {this.state.showPopupCreateBet ? (
@@ -345,6 +373,14 @@ class App extends Component {
             closePopupCancelBetFunction={this.closePopupCancelBet}
             currentSymbol={this.state.currentSymbol}
           ></PopupCancelBet>
+        ) : null}
+        {this.state.showPopupResolveBet ? (
+          <PopupResolveBet
+            bet={this.state.selectedBet}
+            resolveBetFunction={this.resolveBet}
+            closePopupResolveBetFunction={this.closePopupResolveBet}
+            currentSymbol={this.state.currentSymbol}
+          ></PopupResolveBet>
         ) : null}
         {this.state.showPopupLoading ? (
           <PopupLoading

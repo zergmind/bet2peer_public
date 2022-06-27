@@ -28,15 +28,16 @@ contract Bet2Peer is Ownable {
         address counterGambler;
         uint256 currentMatch;
         uint8 result;
-        uint256 origibalBet;
+        uint256 originalBet;
         uint256 minimumCounterBet;
     }
     mapping (address => contractInformation) public contractInfo;
+    mapping (uint256 => uint8) private resultsByMatch; //TO-DO Quitar cuando esté hecha la parte de chainlink
     uint256 public currentMatch;
     address payable originalOwner;
     address payable counterGambler;
     uint8 result;
-    uint256 origibalBet;
+    uint256 originalBet;
     uint256 minimumCounterBet;
     address fatherAddress;
     Father fatherContract;
@@ -90,7 +91,7 @@ contract Bet2Peer is Ownable {
         originalOwner = payable(_originalGambler); //
         currentMatch = _matchId; //
         result = _result; //
-        origibalBet = _originalBet; //
+        originalBet = _originalBet; //
         minimumCounterBet = _minimumCounterBet; //
         fatherAddress = _fatherAddress;
         activeBet = true;
@@ -99,8 +100,16 @@ contract Bet2Peer is Ownable {
         contractInfo[address(this)].originalOwner = _originalGambler;
         contractInfo[address(this)].currentMatch = _matchId;
         contractInfo[address(this)].result = _result;
-        contractInfo[address(this)].origibalBet = _originalBet;
+        contractInfo[address(this)].originalBet = _originalBet;
         contractInfo[address(this)].minimumCounterBet = _minimumCounterBet;
+
+        //TO-DO Quitar estos datos hardcodeados cuando esté hecho lo de chainlink
+        resultsByMatch[18165994] = 0;
+        resultsByMatch[18165993] = 2;
+        resultsByMatch[18166002] = 2;
+        resultsByMatch[18165998] = 1;
+        resultsByMatch[18166001] = 2;
+        resultsByMatch[18165997] = 1;
         
         // Se emite un Evento
         emit Status(string(abi.encodePacked("Partido ", _matchId, " creado")));
@@ -122,7 +131,6 @@ contract Bet2Peer is Ownable {
         require(msg.value >= minimumCounterBet, "Apuesta insuficiente");
         require(isAccepted == false, "Apuesta ya aceptada");
         counterGambler = payable(msg.sender);
-        counterGambler.transfer(msg.value);
         contractInfo[address(this)].counterGambler = counterGambler;
         isAccepted = true;
         
@@ -135,15 +143,17 @@ contract Bet2Peer is Ownable {
     /**
     Función para resulver una apuesta y repartir las ganancias
      */
-    function resolveBet() public payable 
-        isParticipant(msg.sender)
-        contractActive 
+    function resolveBet(address _sender) public payable 
+        isParticipant(_sender)
+        contractActive returns (bool)
     {
         require(isAccepted);
+        //TO-DO 
+        //Poner validación para saber que el partido ha terminado
         //TODO
         //Hacemos la llamada a ChainLink
         //comparamos result con el valor de ChainLink
-        if(result == 1 /*resultado de ChainLink*/) {
+        if(resultsByMatch[currentMatch] == result/*resultado de ChainLink*/) {
             //transferimos las ganancias al originalOwner
             originalOwner.transfer(address(this).balance);
         }
@@ -155,6 +165,8 @@ contract Bet2Peer is Ownable {
         activeBet = false;
         //Emitimos el estatus
         emit Status(string(abi.encodePacked("Apuesta ", getContractAddress(), " resuelta")));
+
+        return true;
     }
 
     /**
@@ -177,7 +189,7 @@ contract Bet2Peer is Ownable {
     /**
     Función que devuelve la dirección del contrato
      */
-    function getContractAddress() onlyOwner public view returns (address)  {
+    function getContractAddress() public view returns (address)  {
         return address(this);
     }
 
@@ -202,4 +214,11 @@ contract Bet2Peer is Ownable {
         return originalOwner;
     }
    
+   /**
+    Función temporal para comprobar que el balance está bien hecho
+     */
+   function getBalance() 
+    public view returns(uint256) {
+        return address(this).balance;
+    }
 }

@@ -87,15 +87,32 @@ contract Father {
         //Asigno a la variable bet el contrato hijo en cuestión
         bet = Bet2Peer(_contract);
         require(bet.getOriginalOwner() == msg.sender, "No eres el creador de esta apuesta");
-        //busco el index del contrato en los arrays del usurio y partido
-        uint256 _userContractIndex = indexOf(contractsByUser[msg.sender], _contract);
-        uint256 _matchContractIndex = indexOf(contractsByMatchId[bet.getMatchId()], _contract);
         //si el contrato se desactiva correctamente elimino el address de los arrays
         if(bet.removeBet(msg.sender)){
+            //busco el index del contrato en los arrays del usurio y partido
+            uint256 _userContractIndex = indexOf(contractsByUser[msg.sender], _contract);
+            uint256 _matchContractIndex = indexOf(contractsByMatchId[bet.getMatchId()], _contract);
             removeBetFromUser(msg.sender, _userContractIndex);
             removeBetFromMatch(bet.getMatchId(), _matchContractIndex);
         }
     }
+
+function resolveBet(address payable _contract) public
+        contractActive
+    {
+        //Asigno a la variable bet el contrato hijo en cuestión
+        bet = Bet2Peer(_contract);
+
+        //si el contrato se desactiva correctamente elimino el address de los arrays
+        if(bet.resolveBet(msg.sender)){
+            //busco el index del contrato en los arrays del usurio y partido
+            uint256 _userContractIndex = indexOf(contractsByUser[msg.sender], _contract);
+            uint256 _matchContractIndex = indexOf(contractsByMatchId[bet.getMatchId()], _contract);
+            removeBetFromUser(msg.sender, _userContractIndex);
+            removeBetFromMatch(bet.getMatchId(), _matchContractIndex);
+        }
+    }
+    
 
     function addBetToCounterGambler(address counterGambler, address _sonContract) public payable{
         contractsByUser[counterGambler].push(_sonContract);
