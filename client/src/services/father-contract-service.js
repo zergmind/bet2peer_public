@@ -21,6 +21,9 @@ export class FatherContractService {
       case 5777:
         this.fatherContractAddress =
           "0xEf720623Da37bc367C612d6DB0f398A54aB0e6fB"; //Ganache Chus
+      default:
+        this.fatherContractAddress =
+          "0xEf720623Da37bc367C612d6DB0f398A54aB0e6fB"; //Ganache Chus
     }
 
     this.fatherContract = await new this.web3.eth.Contract(
@@ -85,7 +88,7 @@ export class FatherContractService {
       .then(
         (contractsAddresses) => {
           return contractsAddresses
-            .filter((contractAddress) => contractAddress != this.nullAddress)
+            .filter((contractAddress) => contractAddress !== this.nullAddress)
             .map((contractAddress) => {
               let bet = new Bet();
               bet.contractAddress = contractAddress;
@@ -105,7 +108,7 @@ export class FatherContractService {
       .then(
         (contractsAddresses) => {
           return contractsAddresses
-            .filter((contractAddress) => contractAddress != this.nullAddress)
+            .filter((contractAddress) => contractAddress !== this.nullAddress)
             .map((contractAddress) => {
               let bet = new Bet();
               bet.contractAddress = contractAddress;
