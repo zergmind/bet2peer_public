@@ -21,9 +21,11 @@ export class FatherContractService {
       case 5777:
         this.fatherContractAddress =
           "0xEf720623Da37bc367C612d6DB0f398A54aB0e6fB"; //Ganache Chus
-      default:
+        break;
+      default: //Ganache Chus
         this.fatherContractAddress =
-          "0xEf720623Da37bc367C612d6DB0f398A54aB0e6fB"; //Ganache Chus
+          "0xEf720623Da37bc367C612d6DB0f398A54aB0e6fB";
+        break;
     }
 
     this.fatherContract = await new this.web3.eth.Contract(
