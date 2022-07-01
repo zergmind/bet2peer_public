@@ -19,6 +19,7 @@ import { PopupAcceptBet } from "./components/popup-accept-bet";
 import { PopupLoading } from "./components/popup-loading";
 import { PopupCancelBet } from "./components/popup-cancel-bet.js";
 import { PopupResolveBet } from "./components/popup-resolve-bet";
+import { PopupNetworkUnavailable } from "./components/popup-network-unavailable";
 
 class App extends Component {
   state = {
@@ -40,13 +41,14 @@ class App extends Component {
     showPopupAcceptBet: false,
     showPopupCancelBet: false,
     showPopupResolveBet: false,
+    showPopupNetworkUnavailable: false,
     showPopupLoading: false,
     userBets: [],
     currentAccountBalance: 0,
     currentSymbol: "",
     web3NetworkAvailable: false,
-    // desiredNetworkId: 80001//Mumbai
-    desiredNetworkId: 5777, //Ganache local
+    desiredNetworkId: 80001, //Mumbai
+    // desiredNetworkId: 5777, //Ganache local
   };
 
   componentDidMount = async () => {
@@ -86,6 +88,8 @@ class App extends Component {
         desiredNetworkId
       );
 
+      const showPopupNetworkUnavailable = !web3NetworkAvailable;
+
       //Evento cuando cambian las cuentas
       window.ethereum.on("accountsChanged", function (accounts) {
         window.location.reload();
@@ -110,6 +114,7 @@ class App extends Component {
         currentAccountBalance,
         currentSymbol,
         web3NetworkAvailable,
+        showPopupNetworkUnavailable,
       });
     } catch (error) {}
   };
@@ -287,6 +292,10 @@ class App extends Component {
     this.closePopupLoading();
   };
 
+  closePopupNetworkUnavailable = () => {
+    this.setState({ showPopupNetworkUnavailable: false });
+  };
+
   getBetsByMatches(matches) {
     const { fatherContractService } = this.state;
     matches.forEach((match) => {
@@ -411,6 +420,13 @@ class App extends Component {
           <PopupLoading
             closePopupLoadingFunction={this.closePopupLoading}
           ></PopupLoading>
+        ) : null}
+        {this.state.showPopupNetworkUnavailable ? (
+          <PopupNetworkUnavailable
+            closePopupNetworkUnavailableFunction={
+              this.closePopupNetworkUnavailable
+            }
+          ></PopupNetworkUnavailable>
         ) : null}
       </div>
     );
