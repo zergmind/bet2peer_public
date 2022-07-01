@@ -213,6 +213,13 @@ contract Bet2Peer is Ownable {
     function getOriginalOwner() public view returns(address) {
         return originalOwner;
     }
+
+     /**
+    Función que devuelve la dirección del que aceptó la apuesta
+     */
+    function getCounterGambler() public view returns(address) {
+        return counterGambler;
+    }
    
    /**
     Función temporal para comprobar que el balance está bien hecho

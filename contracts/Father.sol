@@ -106,9 +106,13 @@ function resolveBet(address payable _contract) public
         //si el contrato se desactiva correctamente elimino el address de los arrays
         if(bet.resolveBet(msg.sender)){
             //busco el index del contrato en los arrays del usurio y partido
-            uint256 _userContractIndex = indexOf(contractsByUser[msg.sender], _contract);
+            address originalOwner = bet.getOriginalOwner();
+            address counterGambler = bet.getCounterGambler();
+            uint256 _originalOwnerContractIndex = indexOf(contractsByUser[msg.sender], _contract);
+            uint256 _counterGamblerContractIndex = indexOf(contractsByUser[msg.sender], _contract);
             uint256 _matchContractIndex = indexOf(contractsByMatchId[bet.getMatchId()], _contract);
-            removeBetFromUser(msg.sender, _userContractIndex);
+            removeBetFromUser(originalOwner, _originalOwnerContractIndex);
+            removeBetFromUser(counterGambler, _counterGamblerContractIndex);
             removeBetFromMatch(bet.getMatchId(), _matchContractIndex);
         }
     }

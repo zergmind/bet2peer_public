@@ -16,7 +16,7 @@ export class FatherContractService {
     switch (networkId) {
       case 80001:
         this.fatherContractAddress =
-          "0x3ccf397a1a39112b561ba6662d22d65b0c405fa2"; //Mumbai
+          "0x00b954a2e6e4b76436b5bb6093b4db4ff9b8364f"; //Mumbai
         break;
       case 5777:
         this.fatherContractAddress =
