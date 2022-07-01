@@ -1,0 +1,249 @@
+:root {
+  --color-primary: #b667ff;
+  --color-secondary: #3a0070; /**/
+  --color-tertiary: #3bed59;/*#f999fe;*/
+  --color-light: #fff;
+  --color-black: #000000;
+}
+
+@font-face {
+    font-family: "Maven Pro Bold";
+    src: url('../fonts/MavenPro-Bold.ttf');
+}
+@font-face {
+    font-family: "Maven Pro Regular";
+    src: url('../fonts/MavenPro-Regular.ttf');
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  outline: 0;
+  border: 0;
+  text-decoration: none;
+  list-style: none;
+}
+a{
+	color:white;
+}
+
+body {
+  font-family: "Maven Pro Bold";
+  background: var(--color-black);
+  border:0;
+  overflow-x: hidden;
+}
+
+.container {
+  width: 85%;
+  margin: 0 auto;
+}
+
+#myVideo {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  min-width: 100%; 
+  min-height: 100%;
+}
+
+/* ======= NAVIGATION BAR ======= */
+nav {
+  position: fixed;
+  width: 100%;
+  z-index: 10;
+}
+
+nav .container a {
+  font-size: 0.9rem;
+}
+
+nav .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: fixed;
+  top: 0;
+  background-color: var(--color-black);
+  background: rgba(0, 0, 0, 0.5);
+  color: #f1f1f1;
+  width: 100%;
+  padding: 20px;
+}
+
+nav .container img {
+  width: 11rem;
+}
+
+nav .container input,
+nav .container #toggleNav {
+  display: none;
+}
+
+nav .container ul {
+  display: flex;
+  gap: 4rem;
+}
+
+a {
+  transition: all 300ms ease;
+}
+
+nav a:hover {
+  color: var(--color-tertiary);
+}
+
+nav .container ul li a.active {
+  font-weight: 700;
+}
+
+.linkApp {
+  background: linear-gradient(
+    to right,
+    var(--color-secondary),
+    var(--color-primary)
+  );
+  padding: 0.7rem 3rem;
+  margin: 0.4rem;
+  border-radius: 0.5rem;
+  position: relative;
+  transition: all 300ms ease;
+}
+
+/* ====== HEADER SECTION ======= */
+section {
+  display: flex;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  top: 0rem;
+  left: 0;
+  text-align: center;
+  color: var(--color-light);
+}
+
+section .container h3 {
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  margin: 3rem;
+}
+
+section .container p {
+  letter-spacing: 0.06rem;
+  font-size: 0.8rem;
+  line-height: 1.7;
+  font-weight: 300;
+  max-width: 40rem;
+  margin: 0 auto;
+  margin-bottom: 3rem;
+}
+
+/* ======= EQUIPO ======= */
+.card{
+    width: 100%;
+    display: flex;
+    gap: 50px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 30px;
+	margin-bottom: 30px;
+}
+.card__perfil{
+    width: 310px;
+    padding: 20px;
+    box-shadow: 1px 1px 5px rgb(201, 201, 201);
+    border: solid rgba(3, 133, 255, 0) 2px;
+    border-radius: 10px;
+}
+.card__perfil:hover{
+    border: solid rgb(3, 133, 255) 2px;
+}
+.card__perfil:hover img{
+    transform: rotate(0);
+}
+.imgCard{
+    width: 140px;
+    border-radius: 50%;
+    box-shadow: 2px 2px 5px rgb(216, 216, 216);
+    transform: rotate(-30deg);
+    transition: all .3s;
+}
+.card__nombre{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+/* ======= MEDIA QUERY FOR SMALLER SCREENS ======= */
+@media screen and (max-width: 850px) {
+  /* NAVIGATION BAR */
+  nav .container {
+    width: 100%;
+    padding: 1rem 0;
+    background-color: #000000;
+	background: rgba(0, 0, 0, 0.5);
+    color: #f1f1f1;
+  }
+
+  nav img {
+    margin-left: 1rem;
+  }
+
+  /* SHOW NAVIGATION MENU ON CHECKED */
+  nav .container #showNav:checked ~ ul {
+    display: block;
+  }
+
+  nav .container #toggleNav {
+    display: inline-block;
+    background-color: #000000;
+	background: rgba(0, 0, 0, 0.5);
+	color: #f1f1f1;
+    font-size: 2rem;
+    margin-right: 1rem;
+    cursor: pointer;
+    transition: all 300ms ease;
+  }
+
+  nav .container #toggleNav:hover {
+     background-color: #000000;	
+     background: rgba(0, 0, 0, 0.5);
+     color: #f1f1f1;
+  }
+
+  nav .container ul {
+    display: none;
+    position: absolute;
+    top: 100%;
+    width: 100%;
+  }
+
+  nav .container li {
+    text-align: center;
+    background: #000000;
+    padding: 2rem 0;
+    transition: all 300ms ease;
+    cursor: pointer;
+  }
+
+  nav .container li:hover {
+    background: var(--color-secondary);
+	
+  }
+
+  section .container h1 {
+    font-size: 5.3rem;
+  }
+
+  /* HEADER SECTION */
+  section .container h3 {
+    font-size: 0.8rem;
+  }
+
+  section .container a {
+    /*padding: 1rem 2rem;*/
+  }  
+}
