@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import MatchDescription from "./match-description.js";
 import Popup from "./popup.js";
 
 export class PopupNetworkUnavailable extends Component {
