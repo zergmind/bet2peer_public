@@ -20,11 +20,11 @@ export class FatherContractService {
         break;
       case 5777:
         this.fatherContractAddress =
-          "0xEf720623Da37bc367C612d6DB0f398A54aB0e6fB"; //Ganache Chus
+          "0x6386feA522b8B3E3Dd02149CB9acAbEe743B7707"; //Ganache Chus
         break;
       default: //Ganache Chus
         this.fatherContractAddress =
-          "0xEf720623Da37bc367C612d6DB0f398A54aB0e6fB";
+          "0x6386feA522b8B3E3Dd02149CB9acAbEe743B7707";
         break;
     }
 

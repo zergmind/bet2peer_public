@@ -49,76 +49,86 @@ export class UserProfile extends Component {
             <div className="user-account">
               <div>{this.props.account}</div>
             </div>
-            <div>Mis apuestas</div>
-            <div className="user-bets">
-              {this.props.userBets ? (
-                this.props.userBets.map((bet) => (
-                  <div key={bet.contractAddress}>
-                    {bet.match ? (
-                      <div className="user-bet-and-cancel">
-                        <div className="user-bet">
-                          <div className="bet-teams">
-                            <div>
-                              <img
-                                src={bet.match.localImageUrl}
-                                alt="equipo_local"
-                              />
+            {this.props.web3NetworkAvailable ? (
+              <React.Fragment>
+                <div>Mis apuestas</div>
+                <div className="user-bets">
+                  {this.props.userBets && this.props.userBets.length > 0 ? (
+                    this.props.userBets.map((bet) => (
+                      <div key={bet.contractAddress}>
+                        {bet.match ? (
+                          <div className="user-bet-and-cancel">
+                            <div className="user-bet">
+                              <div className="bet-teams">
+                                <div>
+                                  <img
+                                    src={bet.match.localImageUrl}
+                                    alt="equipo_local"
+                                  />
+                                </div>
+                                <div>
+                                  <img
+                                    className="vs-image"
+                                    src="/img/vs.png"
+                                    alt="vs"
+                                  />
+                                </div>
+                                <div>
+                                  <img
+                                    src={bet.match.visitorImageUrl}
+                                    alt="equipo_visitante"
+                                  />
+                                </div>
+                              </div>
+                              <div>
+                                <div className="bet-quantity">
+                                  {this.getBetQuantity(bet)}
+                                  <img
+                                    className="bet-logo"
+                                    src="/img/eth.png"
+                                    alt="logo ethereum"
+                                  ></img>
+                                  a cuota {bet.quota}
+                                </div>
+                                <div>{this.getTypeOfBetResult(bet)}</div>
+                              </div>
                             </div>
-                            <div>
-                              <img
-                                className="vs-image"
-                                src="/img/vs.png"
-                                alt="vs"
-                              />
-                            </div>
-                            <div>
-                              <img
-                                src={bet.match.visitorImageUrl}
-                                alt="equipo_visitante"
-                              />
-                            </div>
+                            {this.isAllowedToCancelBet(bet) ? (
+                              <button
+                                onClick={() => {
+                                  this.props.showPopupCancelBetFunction(bet);
+                                }}
+                                className="btn small-btn"
+                              >
+                                Cancelar
+                              </button>
+                            ) : null}
+                            {this.isAllowedToResolveBet(bet) ? (
+                              <button
+                                onClick={() => {
+                                  this.props.showPopupResolveBetFunction(bet);
+                                }}
+                                className="btn small-btn green"
+                              >
+                                Resolver
+                              </button>
+                            ) : null}
                           </div>
-                          <div>
-                            <div className="bet-quantity">
-                              {this.getBetQuantity(bet)}
-                              <img
-                                className="bet-logo"
-                                src="/img/eth.png"
-                                alt="logo ethereum"
-                              ></img>
-                              a cuota {bet.quota}
-                            </div>
-                            <div>{this.getTypeOfBetResult(bet)}</div>
-                          </div>
-                        </div>
-                        {this.isAllowedToCancelBet(bet) ? (
-                          <button
-                            onClick={() => {
-                              this.props.showPopupCancelBetFunction(bet);
-                            }}
-                            className="btn small-btn"
-                          >
-                            Cancelar
-                          </button>
-                        ) : null}
-                        {this.isAllowedToResolveBet(bet) ? (
-                          <button
-                            onClick={() => {
-                              this.props.showPopupResolveBetFunction(bet);
-                            }}
-                            className="btn small-btn green"
-                          >
-                            Resolver
-                          </button>
                         ) : null}
                       </div>
-                    ) : null}
-                  </div>
-                ))
-              ) : (
-                <div>No tienes apuestas todavía</div>
-              )}
-            </div>
+                    ))
+                  ) : (
+                    <div>No tienes apuestas todavía</div>
+                  )}
+                </div>
+              </React.Fragment>
+            ) : (
+              <div>
+                <h4>
+                  bet2peer no puede trabajar con la red que has seleccionado
+                </h4>
+              </div>
+            )}
           </div>
         ) : (
           <div>Para ver tus apuestas conéctate a tu wallet</div>

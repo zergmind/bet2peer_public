@@ -15,6 +15,7 @@ export class UserProfileAndChat extends Component {
           sonContractService={this.props.sonContractService}
           showPopupCancelBetFunction={this.props.showPopupCancelBetFunction}
           showPopupResolveBetFunction={this.props.showPopupResolveBetFunction}
+          web3NetworkAvailable={this.props.web3NetworkAvailable}
         ></UserProfile>
         <Chat messages={this.props.messages}></Chat>
         <ChatForm

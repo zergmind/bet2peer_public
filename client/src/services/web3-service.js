@@ -43,10 +43,27 @@ export class Web3Service {
     }
   };
 
-  //EXTRAÍDO DEL EJEMPLO ORIGINAL
-  // const deployedNetwork = SimpleStorageContract.networks[networkId];
-  // const instance = new web3.eth.Contract(
-  //   SimpleStorageContract.abi,
-  //   deployedNetwork && deployedNetwork.address
-  // );
+  switchNetwork = async (desiredChainId) => {
+    //TO-DO HACER BIEN CUANDO SE PUEDA
+    const currentChainId = await this.getNetworkId();
+
+    if (currentChainId !== desiredChainId) {
+      try {
+        await this.web3.currentProvider.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: this.web3.utils.toHex(desiredChainId) }],
+        });
+
+        return true;
+      } catch (switchError) {
+        // // This error code indicates that the chain has not been added to MetaMask.
+        // if (switchError.code === 4902) {
+        //   alert('add this chain id')
+        // }
+        return false;
+      }
+    }
+
+    return true;
+  };
 }

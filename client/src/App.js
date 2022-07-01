@@ -44,6 +44,9 @@ class App extends Component {
     userBets: [],
     currentAccountBalance: 0,
     currentSymbol: "",
+    web3NetworkAvailable: false,
+    // desiredNetworkId: 80001//Mumbai
+    desiredNetworkId: 5777, //Ganache local
   };
 
   componentDidMount = async () => {
@@ -68,18 +71,26 @@ class App extends Component {
   };
 
   loadServices = async () => {
+    const { desiredNetworkId } = this.state;
     try {
       const web3Service = new Web3Service();
       await web3Service.getWeb3();
+
       const accounts = await web3Service.getAccounts();
       const account = accounts[0];
       const networkId = await web3Service.getNetworkId();
       const networkType = await web3Service.getNetworkType();
       const currentAccountBalance = await web3Service.getBalance(account);
       const currentSymbol = await web3Service.getCurrentSymbol();
+      const web3NetworkAvailable = await web3Service.switchNetwork(
+        desiredNetworkId
+      );
 
       //Evento cuando cambian las cuentas
       window.ethereum.on("accountsChanged", function (accounts) {
+        window.location.reload();
+      });
+      window.ethereum.on("networkChanged", function (accounts) {
         window.location.reload();
       });
 
@@ -98,6 +109,7 @@ class App extends Component {
         sonContractService,
         currentAccountBalance,
         currentSymbol,
+        web3NetworkAvailable,
       });
     } catch (error) {}
   };
@@ -133,9 +145,12 @@ class App extends Component {
   };
 
   loadUserBetsWithData = async () => {
-    const { matches } = this.state;
+    const { matches, web3NetworkAvailable } = this.state;
     const { fatherContractService, account, sonContractService } = this.state;
-    const userBets = await fatherContractService.getBetsByAccount(account);
+
+    const userBets = web3NetworkAvailable
+      ? await fatherContractService.getBetsByAccount(account)
+      : [];
 
     let userBetsWithAllData = [];
     for (let i = 0; i < userBets.length; i++) {
@@ -150,23 +165,31 @@ class App extends Component {
   };
 
   loadMatchBetsWithData = async (matches) => {
-    const { fatherContractService, account, sonContractService } = this.state;
+    const {
+      fatherContractService,
+      account,
+      sonContractService,
+      web3NetworkAvailable,
+    } = this.state;
 
     for (let i = 0; i < matches.length; i++) {
       var match = matches[i];
       match.bets = [];
-      const bets = await fatherContractService.getBetsByMatchId(
-        account,
-        match.id
-      );
-      for (let j = 0; j < bets.length; j++) {
-        let newBet = await sonContractService.getAllData(
-          bets[j].contractAddress,
-          matches
+      if (web3NetworkAvailable) {
+        //NO ESTÁ EN UNA RED PERMITIDA
+        const bets = await fatherContractService.getBetsByMatchId(
+          account,
+          match.id
         );
+        for (let j = 0; j < bets.length; j++) {
+          let newBet = await sonContractService.getAllData(
+            bets[j].contractAddress,
+            matches
+          );
 
-        if (!newBet.isTheUserTheOwner && !newBet.isTheUserTheCounterGambler) {
-          match.bets.push(newBet);
+          if (!newBet.isTheUserTheOwner && !newBet.isTheUserTheCounterGambler) {
+            match.bets.push(newBet);
+          }
         }
       }
     }
@@ -323,6 +346,7 @@ class App extends Component {
               sonContractService={this.state.sonContractService}
               showPopupCancelBetFunction={this.showPopupCancelBetFunction}
               showPopupResolveBetFunction={this.showPopupResolveBetFunction}
+              web3NetworkAvailable={this.state.web3NetworkAvailable}
             ></UserProfile>
           ) : null}
           {this.state.showChat ? (
@@ -344,6 +368,7 @@ class App extends Component {
             sonContractService={this.state.sonContractService}
             showPopupCancelBetFunction={this.showPopupCancelBetFunction}
             showPopupResolveBetFunction={this.showPopupResolveBetFunction}
+            web3NetworkAvailable={this.state.web3NetworkAvailable}
           ></UserProfileAndChat>
         </div>
         {this.state.showPopupCreateBet ? (
