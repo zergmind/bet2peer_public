@@ -356,6 +356,7 @@ class App extends Component {
               showPopupCancelBetFunction={this.showPopupCancelBetFunction}
               showPopupResolveBetFunction={this.showPopupResolveBetFunction}
               web3NetworkAvailable={this.state.web3NetworkAvailable}
+              currentSymbol={this.state.currentSymbol}
             ></UserProfile>
           ) : null}
           {this.state.showChat ? (
@@ -378,6 +379,7 @@ class App extends Component {
             showPopupCancelBetFunction={this.showPopupCancelBetFunction}
             showPopupResolveBetFunction={this.showPopupResolveBetFunction}
             web3NetworkAvailable={this.state.web3NetworkAvailable}
+            currentSymbol={this.state.currentSymbol}
           ></UserProfileAndChat>
         </div>
         {this.state.showPopupCreateBet ? (

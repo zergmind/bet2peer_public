@@ -83,12 +83,7 @@ export class UserProfile extends Component {
                               <div>
                                 <div className="bet-quantity">
                                   {this.getBetQuantity(bet)}
-                                  <img
-                                    className="bet-logo"
-                                    src="/img/eth.png"
-                                    alt="logo ethereum"
-                                  ></img>
-                                  a cuota {bet.quota}
+                                  {this.props.currentSymbol}a cuota {bet.quota}
                                 </div>
                                 <div>{this.getTypeOfBetResult(bet)}</div>
                               </div>
