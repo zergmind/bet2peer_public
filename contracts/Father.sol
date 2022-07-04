@@ -6,49 +6,39 @@
 // SPDX-License-Identifier: UNLICENSED
 
 pragma solidity 0.8.14;
+import "./IFather.sol";
 import "./Bet2Peer.sol";
+import "./BetStorage.sol";
 import "../client/node_modules/@openzeppelin/contracts/access/Ownable.sol";
+
 // Informacion del Smart Contract
 // Nombre: Creador de Apuestas
 // Logica: Implementa la creación de contratos
 
 // Declaracion del Smart Contract - Auction
-contract Father {
+contract Father is IFather, Ownable{
 
     // ----------- Variables (datos) -----------
     //Contrato hijo
     Bet2Peer public bet;
-    //dirección del creador de la apuesta
-    address payable contractOwner;
-
-    //mapping de todos los contratos(apuestas) creados por un usuario 
-    //      usuario     contrato
-    mapping(address =>  address[]) private contractsByUser;
-    //mapping de todos los contratos(apuestas) creados para un partido concreto
-    //      matchId    contrato
-    mapping(uint256 => address[]) private contractsByMatchId;
-    //mapping de todos los contratos(apuestas) creados por un usuario con su contractId y MatchId
-    //      usuario            matchId    contrato
-    mapping(address => mapping(uint256 => address[])) private contractsByMatchIdAndUser;
     
-    //Estado del contrato
-    bool activeContract;
-
+    BetStorage _betStorage;
+   
     // ----------- Events -----------
     event Status(string _message);
 
     // ------------Modifiers ----------
     modifier contractActive() {
-        require(activeContract, "Sorry, contract disabled");
+        require(_betStorage.isContractActive(), "Sorry, contract disabled");
         _;
     }
 
-    // ----------- Constructor -----------
-    // Uso: Inicializa el Smart Contract - Father
-    constructor() {
-        contractOwner = payable(msg.sender);
-        activeContract = true;
+    //set the address of the storage contract that this contract should user
+    //all functions will read and write data to this contract
+    function setStorageContract(address _storageAddress) public {
+        _betStorage = BetStorage(_storageAddress);    
     }
+
 
     // -------------------Functions ------------------
     /**
@@ -59,10 +49,10 @@ contract Father {
     _originalBet: cantidad apostada
     _minimumCounterBet: cantidad a percibir en caso de ganar
      */
-    function createBet(uint256 _matchId, uint8 _result, uint256 _originalBet, uint256 _minimumCounterBet) public payable 
+    function createBet(uint256 _matchId, uint8 _result, uint256 _originalBet, uint256 _minimumCounterBet) override external payable 
         contractActive
     {
-        //Creo un nuevo contrato hijo para la apuesta
+         //Creo un nuevo contrato hijo para la apuesta
         bet = new Bet2Peer(msg.sender, _matchId, _result, _originalBet, _minimumCounterBet, address(this));
         // address contractAddress = address(bet);
         address payable payableContractAddress = payable(address(bet));
@@ -71,17 +61,18 @@ contract Father {
 
         // payable(bet).transfer(msg.value);
         //Añado la dirección del contrato a los mapas del usuario y del partido
-        contractsByUser[msg.sender].push(bet.getContractAddress());
-        contractsByMatchId[_matchId].push(bet.getContractAddress());
+        _betStorage.pushContractsByUser(msg.sender, bet.getContractAddress());
+        _betStorage.pushContractsByMatchId(_matchId, bet.getContractAddress());
+                       
         emit Status("Bet created");
-    }
+    }  
 
     /**
     Función para eliminar una apuesta
     _contracto: dirección de la apuesta que se quiere eliminar
     _matchId: id del partido de la apuesta
      */
-    function removeBet(address payable _contract) public
+    function removeBet(address payable _contract) override external 
         contractActive
     {
         //Asigno a la variable bet el contrato hijo en cuestión
@@ -90,14 +81,19 @@ contract Father {
         //si el contrato se desactiva correctamente elimino el address de los arrays
         if(bet.removeBet(msg.sender)){
             //busco el index del contrato en los arrays del usurio y partido
-            uint256 _userContractIndex = indexOf(contractsByUser[msg.sender], _contract);
-            uint256 _matchContractIndex = indexOf(contractsByMatchId[bet.getMatchId()], _contract);
-            removeBetFromUser(msg.sender, _userContractIndex);
-            removeBetFromMatch(bet.getMatchId(), _matchContractIndex);
+            uint256 _userContractIndex = indexOf(_betStorage.getContractsByUser(msg.sender), _contract);
+            uint256 _matchContractIndex = indexOf(_betStorage.getContractsByMatchId(bet.getMatchId()), _contract);
+            _betStorage.removeBetFromUser(msg.sender, _userContractIndex);
+            _betStorage.removeBetFromMatchId(bet.getMatchId(), _matchContractIndex);
         }
+
     }
 
-function resolveBet(address payable _contract) public
+    /**
+    Función para resolver apuesta
+    _contracto: dirección de la apuesta que se quiere resolver
+     */
+    function resolveBet(address payable _contract) override external
         contractActive
     {
         //Asigno a la variable bet el contrato hijo en cuestión
@@ -108,80 +104,56 @@ function resolveBet(address payable _contract) public
             //busco el index del contrato en los arrays del usurio y partido
             address originalOwner = bet.getOriginalOwner();
             address counterGambler = bet.getCounterGambler();
-            uint256 _originalOwnerContractIndex = indexOf(contractsByUser[msg.sender], _contract);
-            uint256 _counterGamblerContractIndex = indexOf(contractsByUser[msg.sender], _contract);
-            uint256 _matchContractIndex = indexOf(contractsByMatchId[bet.getMatchId()], _contract);
-            removeBetFromUser(originalOwner, _originalOwnerContractIndex);
-            removeBetFromUser(counterGambler, _counterGamblerContractIndex);
-            removeBetFromMatch(bet.getMatchId(), _matchContractIndex);
+            uint256 _originalOwnerContractIndex = indexOf(_betStorage.getContractsByUser(msg.sender), _contract);
+            uint256 _counterGamblerContractIndex = indexOf(_betStorage.getContractsByUser(msg.sender), _contract);
+            uint256 _matchContractIndex = indexOf(_betStorage.getContractsByMatchId(bet.getMatchId()), _contract);
+            _betStorage.removeBetFromUser(originalOwner, _originalOwnerContractIndex);
+            _betStorage.removeBetFromUser(counterGambler, _counterGamblerContractIndex);
+            _betStorage.removeBetFromMatchId(bet.getMatchId(), _matchContractIndex);
         }
     }
     
-
-    function addBetToCounterGambler(address counterGambler, address _sonContract) public payable{
-        contractsByUser[counterGambler].push(_sonContract);
+    function addBetToCounterGambler(address counterGambler, address _sonContract) override external payable{
+        _betStorage.pushContractsByUser(counterGambler, _sonContract);
     }
 
     /**
     Función que devuelve todos los contratos(apuestas) creadas por un usuario
     _user: dirección del usuario del que se muestran las apuestas
      */
-    function getAllBetsByUser(address _user) public view returns (address[] memory){
-        return contractsByUser[_user];
+    function getAllBetsByUser(address _user) override external view returns (address[] memory){
+        return _betStorage.getAllBetsByUser(_user);
     }
 
     /**
     Función que devuelve todos los contratos(apuetas) creadas para un partido concreto
     _matchId: id del partido del que se muestran las apuestas
      */
-    function getAllBetsByMatchId(uint256 _matchId) public view returns (address[] memory){
-        return contractsByMatchId[_matchId];
+    function getAllBetsByMatchId(uint256 _matchId) override external view returns (address[] memory){
+        return _betStorage.getAllBetsByMatchId(_matchId);
     }
-
-    /**
-    Función que devuelve si el contrato está activo o no
-     */
-    function isActive() public view returns (bool){
-        return (activeContract);
-    }
-
+    
     /**
     Función que devuelve la posición de un elemento de un array
     _arr: array en el que se busca el elemento
     _searchFor: elemento que se busca
      */
     function indexOf(address[] memory _arr, address _searchFor) private pure returns (uint256) {
-    for (uint256 i = 0; i < _arr.length; i++) {
-      if (_arr[i] == _searchFor) {
-        return i;
-      }
+        for (uint256 i = 0; i < _arr.length; i++) {
+        if (_arr[i] == _searchFor) {
+            return i;
+        }
+        }
+        revert("Not Found");
     }
-    revert("Not Found");
-  }
 
-  function removeBetFromMatch(uint256 _matchId, uint _index) public{
-    contractsByMatchId[_matchId][_index] = contractsByMatchId[_matchId][contractsByMatchId[_matchId].length - 1];
-    contractsByMatchId[_matchId].pop();
-  }
+    //*********** PANIC FUNCTIONS ************
+    //Vailda si el contrato está activo    
+    function isActive() override external view returns (bool){
+        return _betStorage.isActive();
+    }
 
-  function removeBetFromUser(address _userAddress, uint _index) public{
-    contractsByUser[_userAddress][_index] = contractsByUser[_userAddress][contractsByUser[_userAddress].length - 1];
-    contractsByUser[_userAddress].pop();
-  }
-
-
-////////////////////////////Panic Functions////////////////////////
-    // Funcion
-    // Nombre: stopContract
-    // Uso: pausa el contrato y saca todos los fondos en caso de emergencia
-    function stopContract() public {
-        require(msg.sender == contractOwner, "You must be the original OWNER");
-        // Finaliza la subasta
-        activeContract = false;
-        // Devuelve el dinero al maximo postor
-        contractOwner.transfer(address(this).balance);
-        
-        // Se emite un evento
-        emit Status("El contrato se ha parado");
+    function version() override external pure returns (string memory){
+        return "v1.0";
     }
 }
