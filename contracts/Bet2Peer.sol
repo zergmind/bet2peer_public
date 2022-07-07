@@ -130,7 +130,7 @@ contract Bet2Peer is Ownable {
     {
         require(msg.value >= minimumCounterBet, "Apuesta insuficiente");
         require(isAccepted == false, "Apuesta ya aceptada");
-        counterGambler = payable(msg.sender);
+        counterGambler = payable(tx.origin);
         contractInfo[address(this)].counterGambler = counterGambler;
         isAccepted = true;
         

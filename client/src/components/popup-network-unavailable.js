@@ -10,7 +10,7 @@ export class PopupNetworkUnavailable extends Component {
       >
         <h2>
           La red a la que estás conectado no está permitida. Por favor,
-          conéctate a Mumbai Polygon
+          conéctate a Polygon Mainnet
         </h2>
       </Popup>
     );

@@ -33,6 +33,10 @@ contract BetStorage is Ownable{
         _;
     }
 
+    constructor(){
+        activeContract = true;
+    }
+
     //*********** ACCESS FUNCTIONS ************
     //brinda el acceso al contrato father que se encuentra en productivo
     function setAuthorizedFather(address _address) onlyOwner public {

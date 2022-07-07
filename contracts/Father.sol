@@ -53,7 +53,7 @@ contract Father is IFather, Ownable{
         contractActive
     {
          //Creo un nuevo contrato hijo para la apuesta
-        bet = new Bet2Peer(msg.sender, _matchId, _result, _originalBet, _minimumCounterBet, address(this));
+        bet = new Bet2Peer(tx.origin, _matchId, _result, _originalBet, _minimumCounterBet, address(this));
         // address contractAddress = address(bet);
         address payable payableContractAddress = payable(address(bet));
         // address payable payableContractAddress = address(uint160(contractAddress));
@@ -61,7 +61,7 @@ contract Father is IFather, Ownable{
 
         // payable(bet).transfer(msg.value);
         //Añado la dirección del contrato a los mapas del usuario y del partido
-        _betStorage.pushContractsByUser(msg.sender, bet.getContractAddress());
+        _betStorage.pushContractsByUser(tx.origin, bet.getContractAddress());
         _betStorage.pushContractsByMatchId(_matchId, bet.getContractAddress());
                        
         emit Status("Bet created");
@@ -77,13 +77,13 @@ contract Father is IFather, Ownable{
     {
         //Asigno a la variable bet el contrato hijo en cuestión
         bet = Bet2Peer(_contract);
-        require(bet.getOriginalOwner() == msg.sender, "No eres el creador de esta apuesta");
+        require(bet.getOriginalOwner() == tx.origin, "No eres el creador de esta apuesta");
         //si el contrato se desactiva correctamente elimino el address de los arrays
-        if(bet.removeBet(msg.sender)){
+        if(bet.removeBet(tx.origin)){
             //busco el index del contrato en los arrays del usurio y partido
-            uint256 _userContractIndex = indexOf(_betStorage.getContractsByUser(msg.sender), _contract);
+            uint256 _userContractIndex = indexOf(_betStorage.getContractsByUser(tx.origin), _contract);
             uint256 _matchContractIndex = indexOf(_betStorage.getContractsByMatchId(bet.getMatchId()), _contract);
-            _betStorage.removeBetFromUser(msg.sender, _userContractIndex);
+            _betStorage.removeBetFromUser(tx.origin, _userContractIndex);
             _betStorage.removeBetFromMatchId(bet.getMatchId(), _matchContractIndex);
         }
 
@@ -100,12 +100,12 @@ contract Father is IFather, Ownable{
         bet = Bet2Peer(_contract);
 
         //si el contrato se desactiva correctamente elimino el address de los arrays
-        if(bet.resolveBet(msg.sender)){
+        if(bet.resolveBet(tx.origin)){
             //busco el index del contrato en los arrays del usurio y partido
             address originalOwner = bet.getOriginalOwner();
             address counterGambler = bet.getCounterGambler();
-            uint256 _originalOwnerContractIndex = indexOf(_betStorage.getContractsByUser(msg.sender), _contract);
-            uint256 _counterGamblerContractIndex = indexOf(_betStorage.getContractsByUser(msg.sender), _contract);
+            uint256 _originalOwnerContractIndex = indexOf(_betStorage.getContractsByUser(originalOwner), _contract);
+            uint256 _counterGamblerContractIndex = indexOf(_betStorage.getContractsByUser(counterGambler), _contract);
             uint256 _matchContractIndex = indexOf(_betStorage.getContractsByMatchId(bet.getMatchId()), _contract);
             _betStorage.removeBetFromUser(originalOwner, _originalOwnerContractIndex);
             _betStorage.removeBetFromUser(counterGambler, _counterGamblerContractIndex);

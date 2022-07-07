@@ -100,7 +100,7 @@ export class SonContractService {
           bet.isTheUserTheCounterGambler =
             this.userAccount === bet.counterGambler;
           bet.quantity = this.web3.utils.fromWei(data[4], "ether");
-          debugger;
+
           if (bet.isTheUserTheOwner) {
             bet.quota =
               (parseFloat(bet.minimumCounterBet) + parseFloat(bet.quantity)) /

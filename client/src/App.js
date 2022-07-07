@@ -47,7 +47,8 @@ class App extends Component {
     currentAccountBalance: 0,
     currentSymbol: "",
     web3NetworkAvailable: false,
-    desiredNetworkId: 80001, //Mumbai
+    desiredNetworkId: 137, //Polygon Mainnet
+    // desiredNetworkId: 80001, //Mumbai
     // desiredNetworkId: 5777, //Ganache local
   };
 
@@ -180,6 +181,7 @@ class App extends Component {
     for (let i = 0; i < matches.length; i++) {
       var match = matches[i];
       match.bets = [];
+
       if (web3NetworkAvailable) {
         //NO ESTÁ EN UNA RED PERMITIDA
         const bets = await fatherContractService.getBetsByMatchId(
@@ -287,8 +289,8 @@ class App extends Component {
 
   acceptBetFinished = async (arg) => {
     const { matches } = this.state;
-    await this.loadUserBetsWithData();
     await this.loadMatchBetsWithData(matches);
+    await this.loadUserBetsWithData();
     this.closePopupLoading();
   };
 

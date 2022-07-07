@@ -14,13 +14,23 @@ export class FatherContractService {
   configureService = async (web3Service, networkId) => {
     this.web3 = await web3Service.getWeb3();
     switch (networkId) {
+      case 137:
+        this.fatherContractAddress =
+          "0x2347af8ec100522efe521411fbe0a31620218e86"; //Polygon Producción
+
+        break;
       case 80001:
         this.fatherContractAddress =
           "0x00b954a2e6e4b76436b5bb6093b4db4ff9b8364f"; //Mumbai
+        //ÚLTIMA VERSIÓN EN MUMBAI
+        //0x9b6a0f7cf5d081adce3c846eea612ca0bfee252e
         break;
       case 5777:
+        // this.fatherContractAddress =
+        //   "0x6386feA522b8B3E3Dd02149CB9acAbEe743B7707"; //Ganache Chus
         this.fatherContractAddress =
-          "0x6386feA522b8B3E3Dd02149CB9acAbEe743B7707"; //Ganache Chus
+          "0x49c750515C01831ae54463aA1BEF0306fcb4F04C"; //Ganache Chus proxy
+
         break;
       default: //Ganache Chus
         this.fatherContractAddress =

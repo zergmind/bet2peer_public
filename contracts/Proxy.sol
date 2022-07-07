@@ -22,6 +22,7 @@ contract Proxy is Ownable {
 
     //interface contract address
     IFather public businesslogic;
+    address businessLogicAddress;
 
     // ----------- Constructor -----------
     // Uso: Inicializa el Smart Contract - Father
@@ -30,6 +31,7 @@ contract Proxy is Ownable {
     // Uso: indica la dirección del contrato que implementa el BL de la interface IFather
     function setFather(address _businesslogic) external onlyOwner{
         businesslogic = IFather(_businesslogic);
+        businessLogicAddress = _businesslogic;
     }
 
     // -------------------Functions ------------------
@@ -43,7 +45,7 @@ contract Proxy is Ownable {
      */
     function createBet(uint256 _matchId, uint8 _result, uint256 _originalBet, uint256 _minimumCounterBet) external payable
     {
-        businesslogic.createBet(_matchId, _result, _originalBet, _minimumCounterBet);
+        businesslogic.createBet{value: msg.value}(_matchId, _result, _originalBet, _minimumCounterBet);
     }
 
     /**
