@@ -26,15 +26,8 @@ export class FatherContractService {
         //0x9b6a0f7cf5d081adce3c846eea612ca0bfee252e
         break;
       case 5777:
-        // this.fatherContractAddress =
-        //   "0x6386feA522b8B3E3Dd02149CB9acAbEe743B7707"; //Ganache Chus
         this.fatherContractAddress =
           "0x49c750515C01831ae54463aA1BEF0306fcb4F04C"; //Ganache Chus proxy
-
-        break;
-      default: //Ganache Chus
-        this.fatherContractAddress =
-          "0x6386feA522b8B3E3Dd02149CB9acAbEe743B7707";
         break;
     }
 
